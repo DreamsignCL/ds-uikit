@@ -1,0 +1,127 @@
+// Campos de texto (.form-input en <input> y <textarea>) y select (.form-select).
+// Ambos comparten las variables --ds-form-input-*.
+@layer ds.components {
+  .form-input,
+  .form-select {
+    /* Fondo. */
+    --ds-form-input-bg: var(--ds-color-surface);
+    /* Color del texto. */
+    --ds-form-input-color: var(--ds-color-text);
+    /* Color del borde. */
+    --ds-form-input-border-color: var(--ds-color-border);
+    /* Color del texto de ejemplo (placeholder). */
+    --ds-form-input-placeholder-color: var(--ds-color-text-muted);
+    /* Espacio vertical interno. */
+    --ds-form-input-padding-y: 0.375rem;
+    /* Espacio horizontal interno. */
+    --ds-form-input-padding-x: 0.75rem;
+    --ds-form-input-font-size: var(--ds-font-size-base);
+    --ds-form-input-line-height: var(--ds-line-height-base);
+    /* Radio de las esquinas (píldora). */
+    --ds-form-input-radius: var(--ds-radius-full);
+    /* Radio del textarea y del select múltiple. */
+    --ds-form-input-multiline-radius: var(--ds-radius-lg);
+    /* Alto mínimo del textarea. */
+    --ds-form-input-textarea-min-height: 7.5rem;
+    /* Borde con foco. */
+    --ds-form-input-focus-border-color: var(--ds-color-primary);
+    /* Anillo de foco. */
+    --ds-form-input-focus-ring-color: color-mix(in srgb, var(--ds-color-primary) 15%, transparent);
+    /* Grosor del anillo de foco. */
+    --ds-form-input-focus-ring-width: 4px;
+    /* Borde y anillo con error (is-invalid o aria-invalid). */
+    --ds-form-input-invalid-color: var(--ds-color-danger);
+    /* Borde y anillo de un campo válido (is-valid). */
+    --ds-form-input-valid-color: var(--ds-color-success);
+    /* Opacidad cuando está deshabilitado. */
+    --ds-form-input-disabled-opacity: 0.6;
+
+    display: block;
+    width: 100%;
+    margin: 0;
+    padding: var(--ds-form-input-padding-y) var(--ds-form-input-padding-x);
+    border: 1px solid var(--ds-form-input-border-color);
+    border-radius: var(--ds-form-input-radius);
+    background-color: var(--ds-form-input-bg);
+    color: var(--ds-form-input-color);
+    font-family: inherit;
+    font-size: var(--ds-form-input-font-size);
+    line-height: var(--ds-form-input-line-height);
+    appearance: none;
+    transition: border-color var(--ds-duration-fast) var(--ds-easing);
+
+    &::placeholder {
+      color: var(--ds-form-input-placeholder-color);
+      opacity: 1;
+    }
+
+    &:focus {
+      border-color: var(--ds-form-input-focus-border-color);
+      outline: var(--ds-form-input-focus-ring-width) solid var(--ds-form-input-focus-ring-color);
+      outline-offset: 0;
+    }
+
+    &:disabled {
+      opacity: var(--ds-form-input-disabled-opacity);
+      cursor: not-allowed;
+    }
+  }
+
+  .form-input:where(textarea) {
+    min-height: var(--ds-form-input-textarea-min-height);
+    border-radius: var(--ds-form-input-multiline-radius);
+  }
+
+  // La flecha es un SVG gris: un tema para fondos oscuros puede cambiar background-image.
+  .form-select {
+    padding-right: calc(var(--ds-form-input-padding-x) * 2 + 0.75em);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3E%3C/svg%3E");
+    background-position: right var(--ds-form-input-padding-x) center;
+    background-repeat: no-repeat;
+    background-size: 0.75em;
+    cursor: pointer;
+
+    &:is([multiple], [size]:not([size='1'])) {
+      padding-right: var(--ds-form-input-padding-x);
+      border-radius: var(--ds-form-input-multiline-radius);
+      background-image: none;
+      cursor: default;
+    }
+  }
+
+  // Tamaños (los mismos altos que btn--sm y btn--lg).
+  .form-input--sm,
+  .form-select--sm {
+    --ds-form-input-padding-y: 0.25rem;
+    --ds-form-input-padding-x: 0.5rem;
+    --ds-form-input-font-size: var(--ds-font-size-sm);
+    --ds-form-input-line-height: 1.25;
+  }
+
+  .form-input--lg,
+  .form-select--lg {
+    --ds-form-input-padding-y: 0.75rem;
+    --ds-form-input-padding-x: 1.25rem;
+    --ds-form-input-font-size: var(--ds-font-size-lg);
+  }
+
+  // Validación.
+  :is(.form-input, .form-select):is(.is-invalid, [aria-invalid='true']) {
+    --ds-form-input-border-color: var(--ds-form-input-invalid-color);
+    --ds-form-input-focus-border-color: var(--ds-form-input-invalid-color);
+    --ds-form-input-focus-ring-color: color-mix(in srgb, var(--ds-form-input-invalid-color) 15%, transparent);
+  }
+
+  :is(.form-input, .form-select).is-valid {
+    --ds-form-input-border-color: var(--ds-form-input-valid-color);
+    --ds-form-input-focus-border-color: var(--ds-form-input-valid-color);
+    --ds-form-input-focus-ring-color: color-mix(in srgb, var(--ds-form-input-valid-color) 15%, transparent);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .form-input,
+    .form-select {
+      transition: none;
+    }
+  }
+}

@@ -1,0 +1,172 @@
+// Checkbox, radio y switch (.form-check). El input nativo se dibuja con CSS
+// (appearance: none): sigue funcionando con teclado, formularios y lectores de pantalla.
+@layer ds.components {
+  .form-check {
+    /* Tamaño de la casilla y del radio. */
+    --ds-form-check-size: 1.25em;
+    /* Separación entre el control y el texto. */
+    --ds-form-check-gap: var(--ds-space-2);
+    /* Fondo sin marcar. */
+    --ds-form-check-bg: var(--ds-color-surface);
+    /* Borde sin marcar (y perilla del switch apagado). */
+    --ds-form-check-border-color: color-mix(in srgb, var(--ds-color-text) 50%, var(--ds-color-surface));
+    /* Grosor del borde. */
+    --ds-form-check-border-width: 1px;
+    /* Radio de la casilla del checkbox. */
+    --ds-form-check-radius: var(--ds-radius-sm);
+    /* Borde en hover. */
+    --ds-form-check-hover-border-color: var(--ds-color-primary);
+    /* Fondo y borde cuando está marcado. */
+    --ds-form-check-checked-bg: var(--ds-color-primary);
+    /* Marca, punto del radio y perilla del switch encendido. */
+    --ds-form-check-checked-color: var(--ds-color-primary-contrast);
+    /* Borde con error (is-invalid o aria-invalid). */
+    --ds-form-check-invalid-color: var(--ds-color-danger);
+    /* Ancho del switch. */
+    --ds-form-check-switch-width: 2.25em;
+    /* Opacidad cuando está deshabilitado. */
+    --ds-form-check-disabled-opacity: 0.5;
+
+    display: flex;
+    align-items: flex-start;
+    gap: var(--ds-form-check-gap);
+    line-height: var(--ds-line-height-base);
+  }
+
+  .form-check__input {
+    display: inline-grid;
+    flex-shrink: 0;
+    place-content: center;
+    width: var(--ds-form-check-size);
+    height: var(--ds-form-check-size);
+    // Centrado con la primera línea del texto.
+    margin: calc((var(--ds-line-height-base) * 1em - var(--ds-form-check-size)) / 2) 0 0;
+    border: var(--ds-form-check-border-width) solid var(--ds-form-check-border-color);
+    border-radius: var(--ds-form-check-radius);
+    background-color: var(--ds-form-check-bg);
+    color: var(--ds-form-check-checked-color);
+    appearance: none;
+    cursor: pointer;
+    transition:
+      background-color var(--ds-duration-fast) var(--ds-easing),
+      border-color var(--ds-duration-fast) var(--ds-easing);
+
+    // Marca: se recorta con una máscara y toma el color del texto (currentColor).
+    &::before {
+      content: '';
+      width: 0.75em;
+      height: 0.75em;
+      background-color: currentColor;
+      mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23000' stroke-linecap='round' stroke-linejoin='round' stroke-width='2.5' d='m3 8.5 3.5 3.5 6.5-8'/%3E%3C/svg%3E") center / contain no-repeat;
+      transform: scale(0);
+      transition: transform var(--ds-duration-fast) var(--ds-easing);
+    }
+
+    &:hover:not(:checked, :disabled) {
+      border-color: var(--ds-form-check-hover-border-color);
+    }
+
+    &:checked,
+    &[type='checkbox']:indeterminate {
+      border-color: var(--ds-form-check-checked-bg);
+      background-color: var(--ds-form-check-checked-bg);
+
+      &::before {
+        transform: scale(1);
+      }
+    }
+
+    // Indeterminado: solo por JS (input.indeterminate = true).
+    &[type='checkbox']:indeterminate::before {
+      mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23000' stroke-linecap='round' stroke-width='2.5' d='M3.5 8h9'/%3E%3C/svg%3E");
+    }
+
+    &:disabled {
+      opacity: var(--ds-form-check-disabled-opacity);
+      cursor: not-allowed;
+    }
+
+    &:is(.is-invalid, [aria-invalid='true']) {
+      --ds-form-check-border-color: var(--ds-form-check-invalid-color);
+      --ds-form-check-hover-border-color: var(--ds-form-check-invalid-color);
+      --ds-form-check-checked-bg: var(--ds-form-check-invalid-color);
+    }
+  }
+
+  .form-check__input[type='radio'] {
+    border-radius: 50%;
+
+    &::before {
+      width: 0.45em;
+      height: 0.45em;
+      border-radius: 50%;
+      mask: none;
+    }
+  }
+
+  .form-check__label {
+    cursor: pointer;
+  }
+
+  .form-check__input:disabled ~ .form-check__label {
+    opacity: var(--ds-form-check-disabled-opacity);
+    cursor: not-allowed;
+  }
+
+  // Switch: <input type="checkbox" role="switch">.
+  .form-check--switch .form-check__input {
+    width: var(--ds-form-check-switch-width);
+    padding: 0 2px;
+    border-radius: var(--ds-radius-full);
+    place-content: center start;
+
+    // Perilla.
+    &::before {
+      width: calc(var(--ds-form-check-size) - 2 * var(--ds-form-check-border-width) - 4px);
+      height: calc(var(--ds-form-check-size) - 2 * var(--ds-form-check-border-width) - 4px);
+      border-radius: 50%;
+      background-color: var(--ds-form-check-border-color);
+      mask: none;
+      transform: none;
+      transition:
+        transform var(--ds-duration-fast) var(--ds-easing),
+        background-color var(--ds-duration-fast) var(--ds-easing);
+    }
+
+    &:checked::before {
+      background-color: currentColor;
+      transform: translateX(calc(var(--ds-form-check-switch-width) - var(--ds-form-check-size)));
+    }
+  }
+
+  // Alto contraste de Windows: el sistema quita los fondos, así que la marca usa colores del sistema.
+  @media (forced-colors: active) {
+    .form-check__input {
+      forced-color-adjust: none;
+      border-color: CanvasText;
+      background-color: Canvas;
+      color: HighlightText;
+
+      &:checked,
+      &[type='checkbox']:indeterminate {
+        border-color: Highlight;
+        background-color: Highlight;
+      }
+
+      &:disabled {
+        border-color: GrayText;
+      }
+    }
+
+    .form-check--switch .form-check__input:not(:checked)::before {
+      background-color: CanvasText;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .form-check__input,
+    .form-check__input::before {
+      transition: none;
+    }
+  }
+}

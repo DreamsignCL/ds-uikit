@@ -1,0 +1,32 @@
+// Collapse (.collapse): panel que se muestra u oculta con un botón.
+// Estructura: button[data-ds-toggle="collapse"][data-ds-target="#id"] + div.collapse#id[hidden].
+// Se abre y se cierra con ds-uikit.js, con una transición de alto. Cerrado
+// lleva `hidden`. Sin padding, borde ni margen vertical en .collapse: van en
+// un elemento interno (así la transición no salta).
+@layer ds.components {
+  .collapse {
+    /* Duración de la transición de alto al abrir y cerrar. */
+    --ds-collapse-transition-duration: var(--ds-duration-base);
+
+    // Contiene los márgenes del contenido: el alto medido es el alto real.
+    display: flow-root;
+
+    &[hidden] {
+      display: none;
+    }
+
+    // Estados de la transición (los pone ds-uikit.js, que anima el alto).
+    &.is-opening,
+    &.is-closing {
+      overflow: hidden;
+      transition: height var(--ds-collapse-transition-duration) var(--ds-easing);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .collapse.is-opening,
+    .collapse.is-closing {
+      transition: none;
+    }
+  }
+}

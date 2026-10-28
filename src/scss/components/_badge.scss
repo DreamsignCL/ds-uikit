@@ -1,0 +1,72 @@
+// Badge (.badge): etiqueta corta de estado o categoría.
+@use '../config' as *;
+
+@layer ds.components {
+  .badge {
+    /* Fondo. */
+    --ds-badge-bg: color-mix(in srgb, var(--ds-color-text) 8%, var(--ds-color-surface));
+    /* Color del texto. */
+    --ds-badge-color: var(--ds-color-text);
+    /* Color del borde. */
+    --ds-badge-border-color: transparent;
+    /* Fondo de la versión sólida (badge--solid). */
+    --ds-badge-solid-bg: var(--ds-color-text);
+    /* Texto de la versión sólida. */
+    --ds-badge-solid-color: var(--ds-color-surface);
+    /* Espacio vertical interno. */
+    --ds-badge-padding-y: 0.3rem;
+    /* Espacio horizontal interno. */
+    --ds-badge-padding-x: 1rem;
+    /* Separación entre ícono y texto. */
+    --ds-badge-gap: 0.375rem;
+    --ds-badge-font-size: var(--ds-font-size-sm);
+    --ds-badge-font-weight: var(--ds-font-weight-regular);
+    --ds-badge-line-height: var(--ds-line-height-base);
+    /* Radio de las esquinas (píldora). */
+    --ds-badge-radius: var(--ds-radius-full);
+
+    display: inline-flex;
+    align-items: center;
+    gap: var(--ds-badge-gap);
+    padding: var(--ds-badge-padding-y) var(--ds-badge-padding-x);
+    border: 1px solid var(--ds-badge-border-color);
+    border-radius: var(--ds-badge-radius);
+    background-color: var(--ds-badge-bg);
+    color: var(--ds-badge-color);
+    font-size: var(--ds-badge-font-size);
+    font-weight: var(--ds-badge-font-weight);
+    line-height: var(--ds-badge-line-height);
+    white-space: nowrap;
+    vertical-align: middle;
+
+    & :where(svg) {
+      flex-shrink: 0;
+      width: 1.15em;
+      height: 1.15em;
+    }
+  }
+
+  // Roles: tono suave por defecto.
+  @each $rol, $hover in $roles {
+    .badge--#{$rol} {
+      @include rol-suave($rol, badge);
+      --ds-badge-solid-bg: var(--ds-color-#{$rol});
+      --ds-badge-solid-color: var(--ds-color-#{$rol}-contrast);
+    }
+  }
+
+  // Sólido: se combina con un rol (badge--primary badge--solid).
+  // Va después de los roles para ganar con la misma especificidad.
+  .badge--solid {
+    --ds-badge-bg: var(--ds-badge-solid-bg);
+    --ds-badge-color: var(--ds-badge-solid-color);
+    --ds-badge-border-color: var(--ds-badge-solid-bg);
+  }
+
+  .badge--sm {
+    --ds-badge-padding-y: 0.2rem;
+    --ds-badge-padding-x: 0.5rem;
+    --ds-badge-font-size: var(--ds-font-size-xs);
+    --ds-badge-gap: 0.25rem;
+  }
+}

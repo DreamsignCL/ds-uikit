@@ -1,0 +1,171 @@
+// Toast (.toast): aviso breve y flotante que aparece sobre la página y se
+// cierra solo. Va dentro de .toast-container (fijo, apila los toasts y es la
+// región viva que anuncian los lectores de pantalla). Se muestra y se cierra
+// con ds-uikit.js (data-ds-toggle="toast" y data-ds-dismiss="toast").
+@use '../config' as *;
+
+// Roles del toast: franja y color del ícono.
+$roles-toast: success, danger, warning, info;
+
+@layer ds.components {
+  // Contenedor: arriba a la derecha por defecto. En pantallas angostas ocupa
+  // el ancho disponible menos el margen.
+  .toast-container {
+    /* Ancho máximo de los toasts. */
+    --ds-toast-container-width: 26.25rem;
+    /* Separación con los bordes de la pantalla. */
+    --ds-toast-container-margin: var(--ds-space-4);
+    /* Separación entre toasts. */
+    --ds-toast-container-gap: var(--ds-space-2);
+    /* Capa de los toasts (z-index). */
+    --ds-toast-container-z-index: var(--ds-z-toast);
+
+    position: fixed;
+    inset-block-start: var(--ds-toast-container-margin);
+    inset-inline-end: var(--ds-toast-container-margin);
+    z-index: var(--ds-toast-container-z-index);
+    display: flex;
+    flex-direction: column;
+    gap: var(--ds-toast-container-gap);
+    width: min(100% - 2 * var(--ds-toast-container-margin), var(--ds-toast-container-width));
+    // El espacio entre toasts no bloquea los clics en la página.
+    pointer-events: none;
+
+    & > * {
+      pointer-events: auto;
+    }
+  }
+
+  .toast-container--top-start,
+  .toast-container--bottom-start {
+    inset-inline: var(--ds-toast-container-margin) auto;
+  }
+
+  // Centrado sin transform: así no crea un contexto propio para los hijos.
+  .toast-container--top-center,
+  .toast-container--bottom-center {
+    inset-inline: 0;
+    margin-inline: auto;
+  }
+
+  .toast-container--bottom-start,
+  .toast-container--bottom-center,
+  .toast-container--bottom-end {
+    inset-block: auto var(--ds-toast-container-margin);
+
+    // Abajo, el toast entra desde abajo.
+    & .toast {
+      --ds-toast-offset: 0.5rem;
+    }
+  }
+
+  .toast {
+    /* Fondo. */
+    --ds-toast-bg: var(--ds-color-surface);
+    /* Color del texto. */
+    --ds-toast-color: var(--ds-color-text);
+    /* Color del borde. */
+    --ds-toast-border-color: var(--ds-color-border);
+    /* Franja a la izquierda: color (en las variantes, el del rol). */
+    --ds-toast-accent-color: var(--ds-toast-border-color);
+    /* Franja a la izquierda: grosor. */
+    --ds-toast-accent-width: 0.25rem;
+    /* Color del ícono (toast__icon). */
+    --ds-toast-icon-color: currentColor;
+    /* Espacio vertical interno. */
+    --ds-toast-padding-y: 0.875rem;
+    /* Espacio horizontal interno. */
+    --ds-toast-padding-x: 1rem;
+    /* Separación entre ícono, texto y botón para cerrar. */
+    --ds-toast-gap: 0.75rem;
+    --ds-toast-font-size: var(--ds-font-size-sm);
+    --ds-toast-radius: var(--ds-radius-md);
+    --ds-toast-shadow: var(--ds-shadow-lg);
+    /* Tamaño del botón para cerrar (toast__close). */
+    --ds-toast-close-size: 2rem;
+    /* Desplazamiento vertical al aparecer y al cerrarse (abajo, 0.5rem). */
+    --ds-toast-offset: -0.5rem;
+    /* Duración del fundido. */
+    --ds-toast-transition-duration: var(--ds-duration-fast);
+
+    display: flex;
+    align-items: flex-start;
+    gap: var(--ds-toast-gap);
+    padding: var(--ds-toast-padding-y) var(--ds-toast-padding-x);
+    border: 1px solid var(--ds-toast-border-color);
+    border-inline-start: var(--ds-toast-accent-width) solid var(--ds-toast-accent-color);
+    border-radius: var(--ds-toast-radius);
+    background-color: var(--ds-toast-bg);
+    color: var(--ds-toast-color);
+    box-shadow: var(--ds-toast-shadow);
+    font-size: var(--ds-toast-font-size);
+    line-height: var(--ds-line-height-base);
+    transition:
+      opacity var(--ds-toast-transition-duration) var(--ds-easing),
+      transform var(--ds-toast-transition-duration) var(--ds-easing);
+
+    &[hidden] {
+      display: none;
+    }
+
+    // Estados de la transición (los pone ds-uikit.js).
+    &.is-opening,
+    &.is-closing {
+      opacity: 0;
+      transform: translateY(var(--ds-toast-offset));
+    }
+  }
+
+  .toast__icon {
+    flex-shrink: 0;
+    width: 1.25em;
+    height: 1.25em;
+    margin-top: 0.125em;
+    color: var(--ds-toast-icon-color);
+  }
+
+  .toast__body {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow-wrap: break-word;
+
+    & > :first-child {
+      margin-top: 0;
+    }
+
+    & > :last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .toast__title {
+    display: block;
+    margin: 0 0 var(--ds-space-1);
+    font-size: inherit;
+    font-weight: var(--ds-font-weight-semibold);
+    line-height: inherit;
+  }
+
+  // <button class="toast__close" data-ds-dismiss="toast" aria-label="Cerrar">.
+  .toast__close {
+    flex-shrink: 0;
+    // Margen negativo: la X no agranda el toast y queda alineada al borde.
+    margin: -0.3125rem -0.5rem -0.3125rem auto;
+    @include boton-cerrar(var(--ds-toast-close-size));
+  }
+
+  // La franja usa el color del rol; el ícono, su tono fuerte (más contraste).
+  @each $rol in $roles-toast {
+    .toast--#{$rol} {
+      --ds-toast-accent-color: var(--ds-color-#{$rol});
+      --ds-toast-icon-color: var(--ds-color-#{$rol}-strong);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .toast,
+    .toast__close {
+      transition: none;
+    }
+  }
+}

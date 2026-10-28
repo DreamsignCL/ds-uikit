@@ -1,0 +1,57 @@
+// Variables internas: forma, espacio, elevación, capas y movimiento.
+// Son fijas en toda la familia Dreamsign; el tema no las cambia.
+@layer ds.tokens {
+  :root {
+    /* 6 px */
+    --ds-radius-sm: 6px;
+    /* 8 px */
+    --ds-radius-md: 0.5rem;
+    /* 16 px (cards) */
+    --ds-radius-lg: 1rem;
+    /* 32 px */
+    --ds-radius-xl: 2rem;
+    /* Píldora (botones e inputs). */
+    --ds-radius-full: 999px;
+
+    /* 4 px */
+    --ds-space-1: 0.25rem;
+    /* 8 px */
+    --ds-space-2: 0.5rem;
+    /* 12 px */
+    --ds-space-3: 0.75rem;
+    /* 16 px */
+    --ds-space-4: 1rem;
+    /* 24 px */
+    --ds-space-5: 1.5rem;
+    /* 32 px */
+    --ds-space-6: 2rem;
+    /* 48 px */
+    --ds-space-7: 3rem;
+    /* 64 px */
+    --ds-space-8: 4rem;
+
+    /* Cards. */
+    --ds-shadow-sm: 0 0.5em 1em -0.125em rgb(10 10 10 / 0.1), 0 0 0 1px rgb(10 10 10 / 0.02);
+    /* Menús desplegables. */
+    --ds-shadow-md: 0 0.5rem 1rem rgb(0 0 0 / 0.1);
+    /* Modales y elementos flotantes. */
+    --ds-shadow-lg: 0 1rem 3rem rgb(0 0 0 / 0.175);
+
+    --ds-z-dropdown: 1000;
+    --ds-z-sticky: 1020;
+    --ds-z-fixed: 1030;
+    --ds-z-overlay: 1040;
+    --ds-z-modal: 1050;
+    --ds-z-popover: 1070;
+    --ds-z-toast: 1090;
+    --ds-z-loader: 1100;
+
+    /* Hover, foco y cambios de color. */
+    --ds-duration-fast: 0.2s;
+    /* Paneles y desplazamientos. */
+    --ds-duration-base: 0.35s;
+    /* Entradas y salidas grandes. */
+    --ds-duration-slow: 0.5s;
+    --ds-easing: ease;
+  }
+}

@@ -1,0 +1,130 @@
+// Loader (.loader): spinner con texto mientras algo carga.
+// Estructura: <div class="loader" role="status"> > .loader__content > .loader__spinner + .loader__text.
+// Por defecto cubre la pantalla con un velo que desenfoca la página y aparece
+// con un pequeño retraso (evita parpadeos si la carga es instantánea).
+// Variantes: --inline (dentro de un bloque), --instant (sin retraso), --sm, --lg.
+@layer ds.components {
+  .loader {
+    /* Color del arco que gira. */
+    --ds-loader-color: var(--ds-color-primary);
+    /* Color del anillo de fondo. */
+    --ds-loader-track-color: color-mix(in srgb, var(--ds-loader-color) 15%, transparent);
+    /* Diámetro del spinner. */
+    --ds-loader-size: 3rem;
+    /* Grosor del anillo. */
+    --ds-loader-thickness: 3px;
+    /* Duración de una vuelta. */
+    --ds-loader-speed: 0.85s;
+    /* Separación entre spinner y texto. */
+    --ds-loader-gap: var(--ds-space-4);
+    /* Color del texto. */
+    --ds-loader-text-color: var(--ds-color-text);
+    --ds-loader-font-size: var(--ds-font-size-sm);
+    --ds-loader-font-weight: var(--ds-font-weight-medium);
+    /* Espacio interno. */
+    --ds-loader-padding: var(--ds-space-6);
+    /* Velo que cubre la página (pantalla completa). */
+    --ds-loader-overlay-bg: color-mix(in srgb, var(--ds-color-surface) 55%, transparent);
+    /* Desenfoque de la página bajo el velo. */
+    --ds-loader-blur: 8px;
+    /* Espera antes de aparecer (evita parpadeos en cargas rápidas). */
+    --ds-loader-delay: 150ms;
+
+    position: fixed;
+    inset: 0;
+    z-index: var(--ds-z-loader);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--ds-loader-padding);
+    background: var(--ds-loader-overlay-bg);
+    -webkit-backdrop-filter: blur(var(--ds-loader-blur));
+    backdrop-filter: blur(var(--ds-loader-blur));
+    animation: ds-loader-fade-in var(--ds-duration-fast) var(--ds-easing) var(--ds-loader-delay) both;
+
+    &[hidden] {
+      display: none;
+    }
+  }
+
+  .loader__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--ds-loader-gap);
+  }
+
+  .loader__spinner {
+    display: block;
+    flex-shrink: 0;
+    width: var(--ds-loader-size);
+    height: var(--ds-loader-size);
+    border: var(--ds-loader-thickness) solid var(--ds-loader-track-color);
+    border-top-color: var(--ds-loader-color);
+    border-radius: 50%;
+    animation: ds-loader-spin var(--ds-loader-speed) linear infinite;
+  }
+
+  .loader__text {
+    margin: 0;
+    color: var(--ds-loader-text-color);
+    font-size: var(--ds-loader-font-size);
+    font-weight: var(--ds-loader-font-weight);
+    line-height: var(--ds-line-height-base);
+    letter-spacing: 0.02em;
+    text-align: center;
+  }
+
+  // En línea: dentro de un bloque, sin velo ni cubrir la pantalla.
+  .loader--inline {
+    --ds-loader-padding: var(--ds-space-4);
+
+    position: relative;
+    inset: auto;
+    z-index: auto;
+    background: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  // Sin retraso: carga inicial, cuando no hay página detrás que pueda parpadear.
+  .loader--instant {
+    animation: none;
+  }
+
+  .loader--sm {
+    --ds-loader-size: 1.75rem;
+    --ds-loader-thickness: 2px;
+  }
+
+  .loader--lg {
+    --ds-loader-size: 4rem;
+    --ds-loader-thickness: 4px;
+  }
+
+  @keyframes ds-loader-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes ds-loader-fade-in {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .loader {
+      animation: none;
+    }
+
+    .loader__spinner {
+      animation-duration: calc(var(--ds-loader-speed) * 2);
+    }
+  }
+}

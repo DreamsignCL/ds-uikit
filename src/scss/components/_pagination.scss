@@ -1,0 +1,158 @@
+// Paginación (.pagination): enlaces entre las páginas de un listado.
+// Estructura: <nav class="pagination"> > <ul class="pagination__list"> > <li> > <a class="pagination__link">.
+// Página actual: aria-current="page" (o .is-active, solo visual).
+// Deshabilitado: <a> sin href con aria-disabled="true", <button disabled> o .is-disabled.
+@layer ds.components {
+  .pagination {
+    /* Alineación de los enlaces. */
+    --ds-pagination-justify: flex-start;
+    /* Separación entre enlaces. */
+    --ds-pagination-gap: 0.375rem;
+    /* Alto y ancho mínimo del enlace. */
+    --ds-pagination-link-size: 2.5rem;
+    /* Espacio horizontal interno del enlace. */
+    --ds-pagination-link-padding-x: var(--ds-space-3);
+    /* Separación entre ícono y texto. */
+    --ds-pagination-link-gap: var(--ds-space-1);
+    --ds-pagination-link-font-size: var(--ds-font-size-sm);
+    --ds-pagination-link-font-weight: var(--ds-font-weight-regular);
+    /* Color del texto. */
+    --ds-pagination-link-color: var(--ds-color-text);
+    /* Fondo del enlace. */
+    --ds-pagination-link-bg: var(--ds-color-surface);
+    /* Color del borde. */
+    --ds-pagination-link-border-color: var(--ds-color-border);
+    /* Radio de las esquinas. */
+    --ds-pagination-link-radius: var(--ds-radius-md);
+    /* Texto en hover. */
+    --ds-pagination-link-hover-color: var(--ds-color-primary-contrast);
+    /* Fondo en hover. */
+    --ds-pagination-link-hover-bg: var(--ds-color-primary);
+    /* Borde en hover. */
+    --ds-pagination-link-hover-border-color: var(--ds-color-primary);
+    /* Texto de la página actual. */
+    --ds-pagination-link-active-color: var(--ds-color-primary-contrast);
+    /* Fondo de la página actual. */
+    --ds-pagination-link-active-bg: var(--ds-color-primary);
+    /* Borde de la página actual. */
+    --ds-pagination-link-active-border-color: var(--ds-color-primary);
+    /* Peso de la página actual. */
+    --ds-pagination-link-active-font-weight: var(--ds-font-weight-semibold);
+    /* Tamaño de los íconos. */
+    --ds-pagination-icon-size: 1.25em;
+    /* Color de los puntos suspensivos. */
+    --ds-pagination-ellipsis-color: var(--ds-color-text-muted);
+    /* Color del contorno de foco. */
+    --ds-pagination-focus-color: var(--ds-color-primary);
+    /* Opacidad de un enlace deshabilitado. */
+    --ds-pagination-disabled-opacity: 0.5;
+  }
+
+  .pagination__list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: var(--ds-pagination-justify);
+    gap: var(--ds-pagination-gap);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .pagination__link,
+  .pagination__ellipsis {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: var(--ds-pagination-link-size);
+    min-height: var(--ds-pagination-link-size);
+    font-size: var(--ds-pagination-link-font-size);
+    line-height: var(--ds-line-height-base);
+  }
+
+  // Sirve en <a> y en <button>.
+  .pagination__link {
+    gap: var(--ds-pagination-link-gap);
+    padding: 0 var(--ds-pagination-link-padding-x);
+    border: 1px solid var(--ds-pagination-link-border-color);
+    border-radius: var(--ds-pagination-link-radius);
+    background-color: var(--ds-pagination-link-bg);
+    color: var(--ds-pagination-link-color);
+    font-family: inherit;
+    font-weight: var(--ds-pagination-link-font-weight);
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    transition:
+      color var(--ds-duration-fast) var(--ds-easing),
+      background-color var(--ds-duration-fast) var(--ds-easing),
+      border-color var(--ds-duration-fast) var(--ds-easing);
+
+    &:hover {
+      border-color: var(--ds-pagination-link-hover-border-color);
+      background-color: var(--ds-pagination-link-hover-bg);
+      color: var(--ds-pagination-link-hover-color);
+    }
+
+    // Va después de :hover: la página actual no cambia al pasar el mouse.
+    &.is-active,
+    &[aria-current]:not([aria-current='false']) {
+      border-color: var(--ds-pagination-link-active-border-color);
+      background-color: var(--ds-pagination-link-active-bg);
+      color: var(--ds-pagination-link-active-color);
+      font-weight: var(--ds-pagination-link-active-font-weight);
+      cursor: default;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--ds-pagination-focus-color);
+      outline-offset: 2px;
+    }
+
+    &:disabled,
+    &.is-disabled,
+    &[aria-disabled='true'] {
+      opacity: var(--ds-pagination-disabled-opacity);
+      pointer-events: none;
+    }
+
+    & :where(svg) {
+      flex-shrink: 0;
+      width: var(--ds-pagination-icon-size);
+      height: var(--ds-pagination-icon-size);
+    }
+  }
+
+  // Solo ícono: cuadrado (el ancho lo da el tamaño mínimo). Requiere aria-label.
+  .pagination__link--icon {
+    --ds-pagination-link-padding-x: 0;
+  }
+
+  // Salto entre páginas (…).
+  .pagination__ellipsis {
+    color: var(--ds-pagination-ellipsis-color);
+  }
+
+  // Tamaños.
+  .pagination--sm {
+    --ds-pagination-gap: var(--ds-space-1);
+    --ds-pagination-link-size: 2rem;
+    --ds-pagination-link-padding-x: var(--ds-space-2);
+    --ds-pagination-link-font-size: var(--ds-font-size-xs);
+  }
+
+  .pagination--lg {
+    --ds-pagination-gap: var(--ds-space-2);
+    --ds-pagination-link-size: 3rem;
+    --ds-pagination-link-padding-x: var(--ds-space-4);
+    --ds-pagination-link-font-size: var(--ds-font-size-base);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pagination__link {
+      transition: none;
+    }
+  }
+}

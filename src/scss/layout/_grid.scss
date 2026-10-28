@@ -1,0 +1,112 @@
+// Grilla (.row + .column-*): 12 columnas con flexbox y gap.
+// Las columnas se separan con gap (sin márgenes negativos ni padding):
+// el ancho de .column-N descuenta su parte de los espacios.
+// Sin clase de columna, un hijo de .row ocupa el ancho completo.
+@use 'sass:map';
+@use '../config' as *;
+
+$columnas: 12;
+
+// Columnas y orden; $infijo: '' o '-md', '-lg'… dentro de cada breakpoint.
+@mixin columnas($infijo) {
+  // Partes iguales del espacio libre.
+  .column#{$infijo} {
+    flex: 1 1 0;
+  }
+
+  // Ancho de su contenido.
+  .column#{$infijo}-auto {
+    flex: 0 0 auto;
+  }
+
+  @for $i from 1 through $columnas {
+    .column#{$infijo}-#{$i} {
+      @if $i == $columnas {
+        flex: 0 0 100%;
+      } @else {
+        flex: 0 0 calc(100% * #{$i} / #{$columnas} - var(--ds-row-gap-x) * #{$columnas - $i} / #{$columnas});
+      }
+    }
+  }
+
+  // Orden visual (no cambia el orden de lectura ni el del tabulador).
+  .order#{$infijo}-first {
+    order: -1;
+  }
+
+  @for $i from 0 through 5 {
+    .order#{$infijo}-#{$i} {
+      order: $i;
+    }
+  }
+
+  .order#{$infijo}-last {
+    order: 6;
+  }
+}
+
+@layer ds.layout {
+  .row {
+    /* Espacio horizontal entre columnas. */
+    --ds-row-gap-x: var(--ds-space-6);
+    /* Espacio vertical entre columnas que bajan de línea y entre filas seguidas. */
+    --ds-row-gap-y: var(--ds-space-4);
+    /* Alineación vertical de las columnas (align-items). */
+    --ds-row-align: stretch;
+    /* Alineación horizontal de las columnas (justify-content). */
+    --ds-row-justify: flex-start;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: var(--ds-row-align);
+    justify-content: var(--ds-row-justify);
+    gap: var(--ds-row-gap-y) var(--ds-row-gap-x);
+  }
+
+  // Dos filas seguidas se separan como si fueran una sola.
+  .row + .row {
+    margin-top: var(--ds-row-gap-y);
+  }
+
+  // Especificidad 0: cualquier clase de columna gana.
+  :where(.row) > * {
+    flex: 0 0 100%;
+    min-width: 0;
+  }
+
+  .row--gapless {
+    --ds-row-gap-x: 0px;
+    --ds-row-gap-y: 0px;
+  }
+
+  .row--align-start {
+    --ds-row-align: flex-start;
+  }
+
+  .row--align-center {
+    --ds-row-align: center;
+  }
+
+  .row--align-end {
+    --ds-row-align: flex-end;
+  }
+
+  .row--justify-center {
+    --ds-row-justify: center;
+  }
+
+  .row--justify-end {
+    --ds-row-justify: flex-end;
+  }
+
+  .row--justify-between {
+    --ds-row-justify: space-between;
+  }
+
+  @include columnas('');
+
+  @each $breakpoint, $ancho in $breakpoints {
+    @include mq($breakpoint) {
+      @include columnas('-#{$breakpoint}');
+    }
+  }
+}

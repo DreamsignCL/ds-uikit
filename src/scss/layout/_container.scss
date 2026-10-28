@@ -1,0 +1,38 @@
+// Contenedor (.container): centra el contenido y limita su ancho.
+// El ancho máximo crece en cada breakpoint (768 · 992 · 1200 · 1408 px).
+@use 'sass:map';
+@use '../config' as *;
+
+@layer ds.layout {
+  .container {
+    /* Ancho máximo. Hasta md es 100 %; desde md: 768, 992, 1200 y 1408 px. */
+    --ds-container-max-width: 100%;
+    /* Espacio a los lados. */
+    --ds-container-padding-x: var(--ds-space-4);
+    width: 100%;
+    max-width: var(--ds-container-max-width);
+    margin-inline: auto;
+    padding-inline: var(--ds-container-padding-x);
+
+    @include mq(md) {
+      --ds-container-max-width: #{map.get($breakpoints, md)};
+    }
+
+    @include mq(lg) {
+      --ds-container-max-width: #{map.get($breakpoints, lg)};
+    }
+
+    @include mq(xl) {
+      --ds-container-max-width: #{map.get($breakpoints, xl)};
+    }
+
+    @include mq(xxl) {
+      --ds-container-max-width: #{map.get($breakpoints, xxl)};
+    }
+  }
+
+  // Siempre al 100 % del ancho (mantiene el espacio a los lados).
+  .container--fluid {
+    --ds-container-max-width: 100%;
+  }
+}

@@ -1,0 +1,176 @@
+// Navegación (.nav): lista de enlaces a páginas o secciones.
+// Estructura: <nav class="nav"> > <ul class="nav__list"> > <li> > <a class="nav__link">.
+// El enlace actual lleva aria-current="page" (o .is-active, solo visual).
+@layer ds.components {
+  .nav {
+    /* Dirección de la lista (row o column). */
+    --ds-nav-direction: row;
+    /* Alineación de los enlaces. */
+    --ds-nav-justify: flex-start;
+    /* Separación entre enlaces. */
+    --ds-nav-gap: var(--ds-space-1);
+    /* Espacio vertical interno del enlace. */
+    --ds-nav-link-padding-y: var(--ds-space-2);
+    /* Espacio horizontal interno del enlace. */
+    --ds-nav-link-padding-x: var(--ds-space-3);
+    /* Separación entre ícono y texto. */
+    --ds-nav-link-gap: var(--ds-space-2);
+    --ds-nav-link-font-size: var(--ds-font-size-base);
+    --ds-nav-link-font-weight: var(--ds-font-weight-regular);
+    /* Peso del enlace actual. */
+    --ds-nav-link-active-font-weight: var(--ds-font-weight-semibold);
+    /* Color del enlace. */
+    --ds-nav-link-color: var(--ds-color-text);
+    /* Fondo del enlace (acepta degradados). */
+    --ds-nav-link-bg: transparent;
+    /* Grosor del borde del enlace. */
+    --ds-nav-link-border-width: 0;
+    /* Color del borde del enlace. */
+    --ds-nav-link-border-color: transparent;
+    /* Radio de las esquinas del enlace. */
+    --ds-nav-link-radius: var(--ds-radius-md);
+    /* Color en hover. */
+    --ds-nav-link-hover-color: var(--ds-color-primary);
+    /* Fondo en hover. */
+    --ds-nav-link-hover-bg: var(--ds-nav-link-bg);
+    /* Color del enlace actual. */
+    --ds-nav-link-active-color: var(--ds-color-primary);
+    /* Fondo del enlace actual. */
+    --ds-nav-link-active-bg: var(--ds-nav-link-bg);
+    /* Tamaño de los íconos. */
+    --ds-nav-icon-size: 1.25em;
+    /* Grosor de la línea bajo el enlace (nav--underline). */
+    --ds-nav-indicator-height: 3px;
+    /* Color de la línea bajo el enlace (nav--underline). */
+    --ds-nav-indicator-color: currentColor;
+    /* Color del contorno de foco. */
+    --ds-nav-focus-color: var(--ds-color-primary);
+    /* Opacidad de un enlace deshabilitado. */
+    --ds-nav-disabled-opacity: 0.5;
+  }
+
+  .nav__list {
+    display: flex;
+    flex-direction: var(--ds-nav-direction);
+    flex-wrap: wrap;
+    justify-content: var(--ds-nav-justify);
+    gap: var(--ds-nav-gap);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .nav__link {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--ds-nav-link-gap);
+    padding: var(--ds-nav-link-padding-y) var(--ds-nav-link-padding-x);
+    border: var(--ds-nav-link-border-width) solid var(--ds-nav-link-border-color);
+    border-radius: var(--ds-nav-link-radius);
+    background: var(--ds-nav-link-bg);
+    color: var(--ds-nav-link-color);
+    font-size: var(--ds-nav-link-font-size);
+    font-weight: var(--ds-nav-link-font-weight);
+    line-height: var(--ds-line-height-base);
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+    transition:
+      color var(--ds-duration-fast) var(--ds-easing),
+      background-color var(--ds-duration-fast) var(--ds-easing),
+      border-color var(--ds-duration-fast) var(--ds-easing);
+
+    &:hover {
+      background: var(--ds-nav-link-hover-bg);
+      color: var(--ds-nav-link-hover-color);
+    }
+
+    // Va después de :hover: el enlace actual no cambia al pasar el mouse.
+    &.is-active,
+    &[aria-current]:not([aria-current='false']) {
+      background: var(--ds-nav-link-active-bg);
+      color: var(--ds-nav-link-active-color);
+      font-weight: var(--ds-nav-link-active-font-weight);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--ds-nav-focus-color);
+      outline-offset: 2px;
+    }
+
+    &.is-disabled,
+    &[aria-disabled='true'] {
+      opacity: var(--ds-nav-disabled-opacity);
+      pointer-events: none;
+    }
+
+    & :where(svg) {
+      flex-shrink: 0;
+      width: var(--ds-nav-icon-size);
+      height: var(--ds-nav-icon-size);
+    }
+  }
+
+  // En columna (menús laterales).
+  .nav--vertical {
+    --ds-nav-direction: column;
+  }
+
+  // Píldoras: el enlace actual se rellena con primary.
+  .nav--pills {
+    --ds-nav-link-radius: var(--ds-radius-full);
+    --ds-nav-link-hover-color: var(--ds-color-primary-hover);
+    --ds-nav-link-hover-bg: color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
+    --ds-nav-link-active-color: var(--ds-color-primary-contrast);
+    --ds-nav-link-active-bg: var(--ds-color-primary);
+  }
+
+  // Línea bajo el enlace: crece en hover y queda completa en el enlace actual.
+  .nav--underline {
+    --ds-nav-gap: var(--ds-space-6);
+    --ds-nav-link-padding-x: 0;
+    --ds-nav-link-radius: 0;
+    --ds-nav-link-hover-color: var(--ds-nav-link-color);
+
+    & .nav__link::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: var(--ds-nav-indicator-height);
+      border-radius: var(--ds-radius-full);
+      background-color: var(--ds-nav-indicator-color);
+      transition: width var(--ds-duration-fast) var(--ds-easing);
+    }
+
+    & .nav__link:hover::after {
+      width: 60%;
+    }
+
+    & .nav__link:is(.is-active, [aria-current]:not([aria-current='false']))::after {
+      width: 100%;
+    }
+  }
+
+  // Íconos en círculo (redes sociales). Cada enlace lleva aria-label.
+  .nav--social {
+    --ds-nav-gap: var(--ds-space-4);
+    --ds-nav-link-padding-y: var(--ds-space-2);
+    --ds-nav-link-padding-x: var(--ds-space-2);
+    --ds-nav-link-border-width: 2px;
+    --ds-nav-link-border-color: var(--ds-color-primary);
+    --ds-nav-link-radius: 50%;
+    --ds-nav-link-color: var(--ds-color-primary);
+    --ds-nav-link-hover-color: var(--ds-color-primary-contrast);
+    --ds-nav-link-hover-bg: linear-gradient(41deg, var(--ds-color-primary), var(--ds-color-primary-hover));
+    --ds-nav-icon-size: 1.875rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nav__link,
+    .nav__link::after {
+      transition: none;
+    }
+  }
+}

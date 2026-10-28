@@ -1,0 +1,59 @@
+// Estilos base de elementos, todos a partir de variables --ds-*.
+@layer ds.base {
+  body {
+    font-family: var(--ds-font-family-base);
+    font-size: var(--ds-font-size-base);
+    font-weight: var(--ds-font-weight-regular);
+    line-height: var(--ds-line-height-base);
+    color: var(--ds-color-text);
+    background-color: var(--ds-color-body-bg);
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin-top: 0;
+    margin-bottom: var(--ds-space-2);
+    font-family: var(--ds-font-family-heading);
+    font-weight: var(--ds-font-weight-bold);
+    line-height: var(--ds-line-height-tight);
+  }
+
+  p {
+    margin-top: 0;
+    margin-bottom: var(--ds-space-4);
+    line-height: var(--ds-line-height-relaxed);
+  }
+
+  a {
+    color: var(--ds-color-primary);
+    text-underline-offset: 0.15em;
+
+    &:hover {
+      color: var(--ds-color-primary-hover);
+    }
+  }
+
+  hr {
+    margin: var(--ds-space-4) 0;
+    color: inherit;
+    border: 0;
+    border-top: 1px solid;
+    opacity: 0.25;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--ds-color-primary);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background-color: var(--ds-color-primary);
+    color: var(--ds-color-primary-contrast);
+  }
+}

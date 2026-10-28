@@ -1,0 +1,27 @@
+/*
+ * Tema de prueba para dsUIKit.
+ * Cambia primary, secondary, marca, neutros y fuentes. El resto de las
+ * variables (feedback) mantiene los valores por defecto del kit.
+ */
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:wght@600;700&display=swap");
+
+:root {
+  --ds-color-primary: #0f766e;
+  --ds-color-primary-hover: #115e59;
+  --ds-color-primary-contrast: #fff;
+  --ds-color-secondary: #fb923c;
+  --ds-color-secondary-hover: #ea580c;
+  --ds-color-secondary-contrast: #1c1917;
+
+  --ds-color-brand-start: #e11d48;
+  --ds-color-brand-end: #7c3aed;
+
+  --ds-color-text: #1c1917;
+  --ds-color-text-muted: #57534e;
+  --ds-color-body-bg: #fafaf9;
+  --ds-color-surface: #fff;
+  --ds-color-border: #e7e5e4;
+
+  --ds-font-family-base: "DM Sans", system-ui, sans-serif;
+  --ds-font-family-heading: "Fraunces", Georgia, serif;
+}

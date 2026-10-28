@@ -1,0 +1,169 @@
+// Botón (.btn). Cada variante solo cambia variables --ds-btn-*.
+@use 'sass:map';
+@use '../config' as *;
+
+@layer ds.components {
+  .btn {
+    /* Fondo. */
+    --ds-btn-bg: color-mix(in srgb, var(--ds-color-text) 10%, var(--ds-color-surface));
+    /* Color del texto y de los íconos. */
+    --ds-btn-color: var(--ds-color-text);
+    /* Color del borde. */
+    --ds-btn-border-color: transparent;
+    /* Fondo en hover y estado activo. */
+    --ds-btn-hover-bg: color-mix(in srgb, var(--ds-color-text) 18%, var(--ds-color-surface));
+    /* Texto en hover y estado activo. */
+    --ds-btn-hover-color: var(--ds-btn-color);
+    /* Borde en hover y estado activo. */
+    --ds-btn-hover-border-color: var(--ds-btn-border-color);
+    /* Espacio vertical interno. */
+    --ds-btn-padding-y: 0.375rem;
+    /* Espacio horizontal interno. */
+    --ds-btn-padding-x: 0.75rem;
+    /* Separación entre ícono y texto. */
+    --ds-btn-gap: var(--ds-space-2);
+    --ds-btn-font-family: var(--ds-font-family-base);
+    --ds-btn-font-size: var(--ds-font-size-base);
+    --ds-btn-font-weight: var(--ds-font-weight-regular);
+    --ds-btn-line-height: var(--ds-line-height-base);
+    /* Radio de las esquinas (píldora). */
+    --ds-btn-radius: var(--ds-radius-full);
+    /* Color del contorno de foco. */
+    --ds-btn-focus-color: var(--ds-color-primary);
+    /* Opacidad cuando está deshabilitado. */
+    --ds-btn-disabled-opacity: 0.5;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--ds-btn-gap);
+    padding: var(--ds-btn-padding-y) var(--ds-btn-padding-x);
+    border: 1px solid var(--ds-btn-border-color);
+    border-radius: var(--ds-btn-radius);
+    background-color: var(--ds-btn-bg);
+    color: var(--ds-btn-color);
+    font-family: var(--ds-btn-font-family);
+    font-size: var(--ds-btn-font-size);
+    font-weight: var(--ds-btn-font-weight);
+    line-height: var(--ds-btn-line-height);
+    text-align: center;
+    text-decoration: none;
+    vertical-align: middle;
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    transition:
+      color var(--ds-duration-fast) var(--ds-easing),
+      background-color var(--ds-duration-fast) var(--ds-easing),
+      border-color var(--ds-duration-fast) var(--ds-easing);
+
+    &:hover,
+    &:active,
+    &.is-active,
+    &[aria-expanded='true'],
+    &[aria-pressed='true'] {
+      background-color: var(--ds-btn-hover-bg);
+      color: var(--ds-btn-hover-color);
+      border-color: var(--ds-btn-hover-border-color);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--ds-btn-focus-color);
+      outline-offset: 2px;
+    }
+
+    &:disabled,
+    &.is-disabled,
+    &[aria-disabled='true'] {
+      opacity: var(--ds-btn-disabled-opacity);
+      pointer-events: none;
+    }
+
+    // :where() deja la especificidad en (0,1,0) para que sea fácil cambiar el tamaño.
+    & :where(svg) {
+      flex-shrink: 0;
+      width: 1.25em;
+      height: 1.25em;
+    }
+  }
+
+  // Variantes sólidas y de contorno, generadas desde $roles.
+  @each $rol, $hover in $roles {
+    .btn--#{$rol} {
+      --ds-btn-bg: var(--ds-color-#{$rol});
+      --ds-btn-color: var(--ds-color-#{$rol}-contrast);
+      --ds-btn-border-color: var(--ds-color-#{$rol});
+      --ds-btn-hover-bg: var(--ds-color-#{$rol}-#{$hover});
+      --ds-btn-hover-color: var(--ds-color-#{$rol}-contrast);
+      --ds-btn-hover-border-color: var(--ds-color-#{$rol}-#{$hover});
+    }
+  }
+
+  @each $rol, $hover in $roles {
+    .btn--outline-#{$rol} {
+      --ds-btn-bg: transparent;
+      --ds-btn-color: var(--ds-color-#{$rol});
+      --ds-btn-border-color: var(--ds-color-#{$rol});
+      --ds-btn-hover-bg: var(--ds-color-#{$rol});
+      --ds-btn-hover-color: var(--ds-color-#{$rol}-contrast);
+      --ds-btn-hover-border-color: var(--ds-color-#{$rol});
+    }
+  }
+
+  .btn--ghost {
+    --ds-btn-bg: transparent;
+    --ds-btn-color: var(--ds-color-primary);
+    --ds-btn-border-color: transparent;
+    --ds-btn-hover-bg: color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
+    --ds-btn-hover-color: var(--ds-color-primary-hover);
+  }
+
+  .btn--link {
+    --ds-btn-bg: transparent;
+    --ds-btn-color: var(--ds-color-primary);
+    --ds-btn-border-color: transparent;
+    --ds-btn-hover-bg: transparent;
+    --ds-btn-hover-color: var(--ds-color-primary-hover);
+
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
+
+  // Tamaños.
+  .btn--sm {
+    --ds-btn-padding-y: 0.25rem;
+    --ds-btn-padding-x: 0.5rem;
+    --ds-btn-font-size: var(--ds-font-size-sm);
+    --ds-btn-line-height: 1.25;
+    --ds-btn-gap: 0.375rem;
+  }
+
+  .btn--lg {
+    --ds-btn-padding-y: 0.75rem;
+    --ds-btn-padding-x: 1.25rem;
+    --ds-btn-font-size: var(--ds-font-size-lg);
+    --ds-btn-gap: 0.625rem;
+  }
+
+  // Ancho completo.
+  .btn--block {
+    display: flex;
+    width: 100%;
+  }
+
+  // Solo ícono: cuadrado (circular por el radio). Requiere aria-label.
+  .btn--icon {
+    --ds-btn-padding-x: var(--ds-btn-padding-y);
+
+    & :where(svg) {
+      width: calc(var(--ds-btn-line-height) * 1em);
+      height: calc(var(--ds-btn-line-height) * 1em);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn {
+      transition: none;
+    }
+  }
+}

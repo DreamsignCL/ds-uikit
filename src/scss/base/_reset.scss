@@ -1,0 +1,53 @@
+// Reset mínimo: corrige diferencias entre navegadores sin imponer estilos.
+// No quita márgenes ni estilos de listas, links o botones de forma global.
+@layer ds.reset {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+  }
+
+  img,
+  picture,
+  video,
+  canvas,
+  svg {
+    max-width: 100%;
+  }
+
+  img,
+  video {
+    height: auto;
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+  }
+
+  textarea {
+    resize: vertical;
+  }
+
+  table {
+    border-collapse: collapse;
+  }
+
+  // hidden siempre oculta, aunque una clase defina display (p. ej. .btn o
+  // .row). Con !important en la capa del reset no hay regla que le gane.
+  // until-found queda fuera: el navegador lo muestra al buscar en la página.
+  [hidden]:not([hidden='until-found']) {
+    display: none !important;
+  }
+}

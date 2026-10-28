@@ -1,0 +1,38 @@
+// Texto: alineación (también por breakpoint), color por rol y recorte.
+@use '../config' as *;
+
+@layer ds.utilities {
+  // Propiedades lógicas: start y end siguen la dirección del texto.
+  @each $alineacion in $alineaciones {
+    .text-#{$alineacion} {
+      text-align: $alineacion;
+    }
+  }
+
+  @each $breakpoint, $ancho in $breakpoints {
+    @include mq($breakpoint) {
+      @each $alineacion in $alineaciones {
+        .text-#{$breakpoint}-#{$alineacion} {
+          text-align: $alineacion;
+        }
+      }
+    }
+  }
+
+  @each $rol, $hover in $roles {
+    .text-#{$rol} {
+      color: var(--ds-color-#{$rol});
+    }
+  }
+
+  .text-muted {
+    color: var(--ds-color-text-muted);
+  }
+
+  // Una línea con puntos suspensivos. Necesita un ancho (bloque o inline-block).
+  .text-truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}

@@ -1,0 +1,23 @@
+// Oculta un elemento a la vista, pero no a los lectores de pantalla
+// (p. ej. «Cargando…» junto a los skeletons). Ex .sr-only del sitio.
+// visually-hidden-focusable se ve al recibir el foco («Saltar al contenido»).
+// Llevan !important (en capa, gana incluso al CSS sin capa del sitio): si una
+// regla del sitio les cambiara position o width, el texto quedaría a la vista.
+@layer ds.utilities {
+  .visually-hidden,
+  .visually-hidden-focusable:not(:focus, :focus-within) {
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip-path: inset(50%) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+
+    // Un caption con position: absolute saca la leyenda de la tabla.
+    &:not(caption) {
+      position: absolute !important;
+    }
+  }
+}

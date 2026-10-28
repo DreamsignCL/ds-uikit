@@ -1,0 +1,20 @@
+// Display: d-{valor} y d-{bp}-{valor} (desde ese breakpoint).
+@use '../config' as *;
+
+@layer ds.utilities {
+  @each $display in $displays {
+    .d-#{$display} {
+      display: $display;
+    }
+  }
+
+  @each $breakpoint, $ancho in $breakpoints {
+    @include mq($breakpoint) {
+      @each $display in $displays {
+        .d-#{$breakpoint}-#{$display} {
+          display: $display;
+        }
+      }
+    }
+  }
+}

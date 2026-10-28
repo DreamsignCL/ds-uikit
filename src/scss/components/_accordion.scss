@@ -1,0 +1,139 @@
+// Acordeón (.accordion): lista de secciones que se abren y cierran (preguntas frecuentes…).
+// Estructura: div.accordion > div.accordion__item > h3.accordion__header >
+// button.accordion__button[data-ds-toggle="collapse"] + div.collapse > div.accordion__body.
+// Con data-ds-parent en los paneles, se abre uno a la vez.
+@layer ds.components {
+  .accordion {
+    /* Fondo. */
+    --ds-accordion-bg: var(--ds-color-surface);
+    /* Color del texto. */
+    --ds-accordion-color: var(--ds-color-text);
+    /* Color del borde exterior y de los separadores. */
+    --ds-accordion-border-color: var(--ds-color-border);
+    --ds-accordion-radius: var(--ds-radius-md);
+    /* Espacio horizontal interno de botones y contenido. */
+    --ds-accordion-padding-x: var(--ds-space-4);
+    /* Espacio vertical interno del botón. */
+    --ds-accordion-button-padding-y: var(--ds-space-4);
+    --ds-accordion-button-font-size: var(--ds-font-size-base);
+    --ds-accordion-button-font-weight: var(--ds-font-weight-semibold);
+    /* Fondo del botón en hover. */
+    --ds-accordion-button-hover-bg: color-mix(in srgb, var(--ds-color-text) 4%, var(--ds-color-surface));
+    /* Color del botón de una sección abierta. */
+    --ds-accordion-button-active-color: var(--ds-color-primary-hover);
+    /* Fondo del botón de una sección abierta. */
+    --ds-accordion-button-active-bg: color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-color-surface));
+    /* Tamaño de la flecha. */
+    --ds-accordion-icon-size: 1rem;
+    /* Espacio vertical interno del contenido. */
+    --ds-accordion-body-padding-y: var(--ds-space-4);
+    /* Color del contorno de foco. */
+    --ds-accordion-focus-color: var(--ds-color-primary);
+    /* Duración del cambio de color y del giro de la flecha. */
+    --ds-accordion-transition-duration: var(--ds-duration-fast);
+
+    border: 1px solid var(--ds-accordion-border-color);
+    border-radius: var(--ds-accordion-radius);
+    background-color: var(--ds-accordion-bg);
+    color: var(--ds-accordion-color);
+  }
+
+  .accordion__item + .accordion__item {
+    border-top: 1px solid var(--ds-accordion-border-color);
+  }
+
+  // Título de la sección (h2…h6, según la página): solo contiene el botón.
+  .accordion__header {
+    margin: 0;
+    font-family: inherit;
+    font-size: var(--ds-accordion-button-font-size);
+    font-weight: var(--ds-accordion-button-font-weight);
+    line-height: var(--ds-line-height-tight);
+  }
+
+  .accordion__button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--ds-space-3);
+    width: 100%;
+    margin: 0;
+    padding: var(--ds-accordion-button-padding-y) var(--ds-accordion-padding-x);
+    border: 0;
+    border-radius: 0;
+    background-color: transparent;
+    color: inherit;
+    font: inherit;
+    text-align: start;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition:
+      color var(--ds-accordion-transition-duration) var(--ds-easing),
+      background-color var(--ds-accordion-transition-duration) var(--ds-easing);
+
+    // Flecha: gira al abrir.
+    &::after {
+      content: '';
+      flex-shrink: 0;
+      width: var(--ds-accordion-icon-size);
+      height: var(--ds-accordion-icon-size);
+      background-color: currentColor;
+      mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath fill='none' stroke='%23000' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m2.5 4.5 3.5 3.5 3.5-3.5'/%3E%3C/svg%3E") center / contain no-repeat;
+      transition: transform var(--ds-accordion-transition-duration) var(--ds-easing);
+    }
+
+    &:hover {
+      background-color: var(--ds-accordion-button-hover-bg);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--ds-accordion-focus-color);
+      outline-offset: -2px;
+    }
+
+    &[aria-expanded='true'] {
+      background-color: var(--ds-accordion-button-active-bg);
+      color: var(--ds-accordion-button-active-color);
+
+      &::after {
+        transform: rotate(180deg);
+      }
+    }
+
+    &:disabled,
+    &[aria-disabled='true'] {
+      opacity: 0.5;
+      cursor: default;
+    }
+  }
+
+  // Esquinas del fondo del botón (en vez de overflow: hidden, que recortaría el contenido).
+  .accordion__item:first-child .accordion__button {
+    border-start-start-radius: calc(var(--ds-accordion-radius) - 1px);
+    border-start-end-radius: calc(var(--ds-accordion-radius) - 1px);
+  }
+
+  .accordion__item:last-child .accordion__button:not([aria-expanded='true']) {
+    border-end-start-radius: calc(var(--ds-accordion-radius) - 1px);
+    border-end-end-radius: calc(var(--ds-accordion-radius) - 1px);
+  }
+
+  .accordion__body {
+    padding: var(--ds-accordion-body-padding-y) var(--ds-accordion-padding-x);
+
+    & > :first-child {
+      margin-top: 0;
+    }
+
+    & > :last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .accordion__button,
+    .accordion__button::after {
+      transition: none;
+    }
+  }
+}

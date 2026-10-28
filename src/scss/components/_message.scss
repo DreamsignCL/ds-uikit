@@ -1,0 +1,128 @@
+// Mensaje (.message): aviso dentro de la página (resultado de un formulario, advertencias…).
+@use '../config' as *;
+
+@layer ds.components {
+  .message {
+    /* Fondo. */
+    --ds-message-bg: color-mix(in srgb, var(--ds-color-text) 8%, var(--ds-color-surface));
+    /* Color del texto y de los íconos. */
+    --ds-message-color: var(--ds-color-text);
+    /* Color del borde. */
+    --ds-message-border-color: transparent;
+    /* Espacio vertical interno. */
+    --ds-message-padding-y: 0.75rem;
+    /* Espacio horizontal interno. */
+    --ds-message-padding-x: 1rem;
+    /* Separación entre ícono y contenido. */
+    --ds-message-gap: 0.75rem;
+    /* Margen inferior (separa mensajes seguidos). */
+    --ds-message-margin-bottom: var(--ds-space-2);
+    --ds-message-font-size: var(--ds-font-size-sm);
+    --ds-message-radius: var(--ds-radius-md);
+    /* Tamaño del botón para cerrar (message__close). */
+    --ds-message-close-size: 2rem;
+    /* Duración del fundido al cerrar o mostrar con JS. */
+    --ds-message-transition-duration: var(--ds-duration-fast);
+
+    position: relative;
+    margin-bottom: var(--ds-message-margin-bottom);
+    padding: var(--ds-message-padding-y) var(--ds-message-padding-x);
+    border: 1px solid var(--ds-message-border-color);
+    border-radius: var(--ds-message-radius);
+    background-color: var(--ds-message-bg);
+    color: var(--ds-message-color);
+    font-size: var(--ds-message-font-size);
+    line-height: var(--ds-line-height-base);
+    transition: opacity var(--ds-message-transition-duration) var(--ds-easing);
+
+    // Cerrado con JS (también con message--icon, que usa flex).
+    &[hidden] {
+      display: none;
+    }
+
+    // Estados de la transición (los pone ds-uikit.js).
+    &.is-opening,
+    &.is-closing {
+      opacity: 0;
+    }
+
+    & > :first-child,
+    & .message__content > :first-child {
+      margin-top: 0;
+    }
+
+    & > :last-child,
+    & .message__content > :last-child {
+      margin-bottom: 0;
+    }
+
+    & a {
+      color: inherit;
+      font-weight: var(--ds-font-weight-semibold);
+      text-decoration: underline;
+    }
+  }
+
+  // El botón para cerrar no cuenta como primer o último hijo del contenido.
+  .message > :nth-child(1 of :not(.message__close)) {
+    margin-top: 0;
+  }
+
+  .message > :nth-last-child(1 of :not(.message__close)) {
+    margin-bottom: 0;
+  }
+
+  // Con botón para cerrar: reserva su espacio a la derecha.
+  .message--dismissible {
+    padding-right: calc(var(--ds-message-padding-x) + var(--ds-message-close-size));
+  }
+
+  // <button class="message__close" data-ds-dismiss="message" aria-label="Cerrar">.
+  // La X se dibuja con CSS y toma el color del mensaje.
+  .message__close {
+    position: absolute;
+    top: calc(var(--ds-message-padding-y) / 2);
+    right: calc(var(--ds-message-padding-x) / 2);
+    @include boton-cerrar(var(--ds-message-close-size));
+  }
+
+  .message__title {
+    display: block;
+    margin: 0 0 var(--ds-space-1);
+    font-size: inherit;
+    font-weight: var(--ds-font-weight-semibold);
+    line-height: inherit;
+  }
+
+  // Con ícono: <svg class="message__icon"> + <div class="message__content">.
+  .message--icon {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--ds-message-gap);
+  }
+
+  .message__icon {
+    flex-shrink: 0;
+    width: 1.25em;
+    height: 1.25em;
+    margin-top: 0.125em;
+  }
+
+  .message__content {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  @each $rol, $hover in $roles {
+    .message--#{$rol} {
+      @include rol-suave($rol, message);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .message,
+    .message__close {
+      transition: none;
+    }
+  }
+}

@@ -1,0 +1,32 @@
+// dsUIKit — punto de entrada.
+// _layers va primero: fija el orden de las capas. El CSS sin capa
+// (theme.css y el CSS de cada sitio) siempre gana, sin usar !important.
+@use 'layers';
+@use 'base/reset';
+@use 'tokens/color';
+@use 'tokens/typography';
+@use 'tokens/internal';
+@use 'base/base';
+@use 'layout/container';
+@use 'layout/grid';
+@use 'components/button';
+@use 'components/badge';
+@use 'components/message';
+@use 'components/card';
+@use 'components/nav';
+@use 'components/pagination';
+@use 'components/loader';
+@use 'components/skeleton';
+@use 'components/modal';
+@use 'components/dropdown';
+@use 'components/collapse';
+@use 'components/accordion';
+@use 'components/tabs';
+@use 'components/toast';
+@use 'components/form';
+@use 'components/form-input';
+@use 'components/form-check';
+@use 'utilities/text';
+@use 'utilities/spacing';
+@use 'utilities/display';
+@use 'utilities/visually-hidden';

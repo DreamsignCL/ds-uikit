@@ -1,0 +1,230 @@
+// Dropdown (.dropdown): botón que despliega un menú de enlaces o acciones.
+// Estructura: div.dropdown > button[data-ds-toggle="dropdown"] + div.dropdown__menu[hidden]
+// > a o button.dropdown__item, .dropdown__header y hr.dropdown__divider.
+// Se abre y se cierra con ds-uikit.js. El ítem actual lleva aria-current (o
+// .is-active) y el deshabilitado, aria-disabled="true" o disabled.
+@layer ds.components {
+  .dropdown {
+    /* Ancho mínimo del menú (si el botón es más ancho, toma su ancho). */
+    --ds-dropdown-min-width: 10rem;
+    /* Separación entre el botón y el menú. */
+    --ds-dropdown-gap: var(--ds-space-1);
+    /* Espacio vertical interno del menú. */
+    --ds-dropdown-padding-y: var(--ds-space-2);
+    /* Fondo del menú. */
+    --ds-dropdown-bg: var(--ds-color-surface);
+    /* Color del texto. */
+    --ds-dropdown-color: var(--ds-color-text);
+    /* Color del borde del menú. */
+    --ds-dropdown-border-color: var(--ds-color-border);
+    --ds-dropdown-radius: var(--ds-radius-md);
+    --ds-dropdown-shadow: var(--ds-shadow-md);
+    --ds-dropdown-font-size: var(--ds-font-size-sm);
+    /* Espacio vertical interno del ítem. */
+    --ds-dropdown-item-padding-y: var(--ds-space-2);
+    /* Espacio horizontal interno de ítems y encabezados. */
+    --ds-dropdown-item-padding-x: var(--ds-space-4);
+    /* Separación entre ícono y texto. */
+    --ds-dropdown-item-gap: var(--ds-space-2);
+    /* Color del ítem en hover y con foco. */
+    --ds-dropdown-item-hover-color: var(--ds-dropdown-color);
+    /* Fondo del ítem en hover y con foco. */
+    --ds-dropdown-item-hover-bg: color-mix(in srgb, var(--ds-color-text) 6%, var(--ds-color-surface));
+    /* Color del ítem actual. */
+    --ds-dropdown-item-active-color: var(--ds-color-primary-hover);
+    /* Fondo del ítem actual. */
+    --ds-dropdown-item-active-bg: color-mix(in srgb, var(--ds-color-primary) 12%, var(--ds-color-surface));
+    /* Peso del ítem actual. */
+    --ds-dropdown-item-active-font-weight: var(--ds-font-weight-semibold);
+    /* Opacidad de un ítem deshabilitado. */
+    --ds-dropdown-item-disabled-opacity: 0.5;
+    /* Tamaño de los íconos de los ítems. */
+    --ds-dropdown-icon-size: 1.25em;
+    /* Color del encabezado (dropdown__header). */
+    --ds-dropdown-header-color: var(--ds-color-text-muted);
+    /* Tamaño del encabezado. */
+    --ds-dropdown-header-font-size: var(--ds-font-size-xs);
+    /* Color del separador (dropdown__divider). */
+    --ds-dropdown-divider-color: var(--ds-color-border);
+    /* Color del contorno de foco. */
+    --ds-dropdown-focus-color: var(--ds-color-primary);
+    /* Desplazamiento del menú hacia el botón al abrir y cerrar. */
+    --ds-dropdown-offset: 0.5rem;
+    /* Duración del fundido al abrir y cerrar. */
+    --ds-dropdown-transition-duration: var(--ds-duration-fast);
+    /* Capa del menú (z-index). */
+    --ds-dropdown-z-index: var(--ds-z-dropdown);
+
+    position: relative;
+    display: inline-flex;
+    vertical-align: middle;
+  }
+
+  // Flecha opcional del botón (dropdown__toggle): gira al abrir.
+  .dropdown__toggle::after {
+    content: '';
+    flex-shrink: 0;
+    width: 0.75em;
+    height: 0.75em;
+    background-color: currentColor;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath fill='none' stroke='%23000' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.75' d='m2.5 4.5 3.5 3.5 3.5-3.5'/%3E%3C/svg%3E") center / contain no-repeat;
+    transition: transform var(--ds-dropdown-transition-duration) var(--ds-easing);
+  }
+
+  .dropdown__toggle[aria-expanded='true']::after,
+  .dropdown--up .dropdown__toggle::after {
+    transform: rotate(180deg);
+  }
+
+  .dropdown--up .dropdown__toggle[aria-expanded='true']::after {
+    transform: none;
+  }
+
+  .dropdown__menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: var(--ds-dropdown-z-index);
+    width: max-content;
+    min-width: max(100%, var(--ds-dropdown-min-width));
+    max-width: calc(100vw - 1rem);
+    margin: var(--ds-dropdown-gap) 0 0;
+    padding: var(--ds-dropdown-padding-y) 0;
+    border: 1px solid var(--ds-dropdown-border-color);
+    border-radius: var(--ds-dropdown-radius);
+    background-color: var(--ds-dropdown-bg);
+    color: var(--ds-dropdown-color);
+    box-shadow: var(--ds-dropdown-shadow);
+    font-size: var(--ds-dropdown-font-size);
+    line-height: var(--ds-line-height-base);
+    text-align: start;
+    transition:
+      opacity var(--ds-dropdown-transition-duration) var(--ds-easing),
+      transform var(--ds-dropdown-transition-duration) var(--ds-easing);
+
+    &[hidden] {
+      display: none;
+    }
+
+    // Estados de la transición (los pone ds-uikit.js).
+    &.is-opening,
+    &.is-closing {
+      opacity: 0;
+      transform: translateY(calc(-1 * var(--ds-dropdown-offset)));
+    }
+  }
+
+  // Alineado al borde derecho del botón.
+  .dropdown__menu--end {
+    right: 0;
+    left: auto;
+  }
+
+  // Hacia arriba: dropdown--up, o un dropdown que ds-uikit.js dio vuelta (is-flipped)
+  // porque abajo no cabía. Un dropdown--up dado vuelta se abre hacia abajo.
+  .dropdown--up,
+  .dropdown.is-flipped {
+    & > .dropdown__menu {
+      top: auto;
+      bottom: 100%;
+      margin: 0 0 var(--ds-dropdown-gap);
+
+      &.is-opening,
+      &.is-closing {
+        transform: translateY(var(--ds-dropdown-offset));
+      }
+    }
+  }
+
+  .dropdown--up.is-flipped > .dropdown__menu {
+    top: 100%;
+    bottom: auto;
+    margin: var(--ds-dropdown-gap) 0 0;
+
+    &.is-opening,
+    &.is-closing {
+      transform: translateY(calc(-1 * var(--ds-dropdown-offset)));
+    }
+  }
+
+  // Ítem: <a href> o <button type="button">.
+  .dropdown__item {
+    display: flex;
+    align-items: center;
+    gap: var(--ds-dropdown-item-gap);
+    width: 100%;
+    margin: 0;
+    padding: var(--ds-dropdown-item-padding-y) var(--ds-dropdown-item-padding-x);
+    border: 0;
+    background-color: transparent;
+    color: inherit;
+    font: inherit;
+    text-align: inherit;
+    text-decoration: none;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition:
+      color var(--ds-duration-fast) var(--ds-easing),
+      background-color var(--ds-duration-fast) var(--ds-easing);
+
+    &:hover,
+    &:focus-visible {
+      background-color: var(--ds-dropdown-item-hover-bg);
+      color: var(--ds-dropdown-item-hover-color);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--ds-dropdown-focus-color);
+      outline-offset: -2px;
+    }
+
+    // Va después de :hover: el ítem actual no cambia al pasar el mouse.
+    &.is-active,
+    &[aria-current]:not([aria-current='false']) {
+      background-color: var(--ds-dropdown-item-active-bg);
+      color: var(--ds-dropdown-item-active-color);
+      font-weight: var(--ds-dropdown-item-active-font-weight);
+    }
+
+    &:disabled,
+    &.is-disabled,
+    &[aria-disabled='true'] {
+      opacity: var(--ds-dropdown-item-disabled-opacity);
+      pointer-events: none;
+      cursor: default;
+    }
+
+    & :where(svg) {
+      flex-shrink: 0;
+      width: var(--ds-dropdown-icon-size);
+      height: var(--ds-dropdown-icon-size);
+    }
+  }
+
+  // Título de un grupo de ítems (no es interactivo).
+  .dropdown__header {
+    display: block;
+    margin: 0;
+    padding: var(--ds-space-2) var(--ds-dropdown-item-padding-x) var(--ds-space-1);
+    color: var(--ds-dropdown-header-color);
+    font-size: var(--ds-dropdown-header-font-size);
+    font-weight: var(--ds-font-weight-semibold);
+  }
+
+  // Separador: <hr class="dropdown__divider">.
+  .dropdown__divider {
+    height: 0;
+    margin: var(--ds-space-2) 0;
+    border: 0;
+    border-top: 1px solid var(--ds-dropdown-divider-color);
+    opacity: 1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .dropdown__menu,
+    .dropdown__item,
+    .dropdown__toggle::after {
+      transition: none;
+    }
+  }
+}

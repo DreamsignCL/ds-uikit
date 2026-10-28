@@ -1,0 +1,234 @@
+// Card (.card): contenedor de contenido relacionado.
+// Lo exclusivo de una página (alturas fijas, animaciones) va en el CSS del sitio, sobre .card.
+@layer ds.components {
+  .card {
+    /* Fondo. */
+    --ds-card-bg: var(--ds-color-surface);
+    /* Color del texto. */
+    --ds-card-color: inherit;
+    /* Color del borde. */
+    --ds-card-border-color: var(--ds-color-border);
+    /* Grosor del borde. */
+    --ds-card-border-width: 1px;
+    /* Radio de las esquinas. */
+    --ds-card-radius: var(--ds-radius-lg);
+    /* Sombra. */
+    --ds-card-shadow: none;
+    /* Espacio interno de cuerpo, cabecera y pie. */
+    --ds-card-padding: var(--ds-space-4);
+    /* Separación entre las partes de la card. */
+    --ds-card-gap: 0;
+    /* Fondo de cabecera y pie. */
+    --ds-card-cap-bg: color-mix(in srgb, var(--ds-color-text) 6%, var(--ds-color-surface));
+    /* Alto de la imagen (auto = proporción original). */
+    --ds-card-image-height: auto;
+    /* Radio de la imagen. */
+    --ds-card-image-radius: 0;
+    /* Tamaño del ícono destacado. */
+    --ds-card-icon-size: 3.5rem;
+    /* Fondo del ícono destacado. */
+    --ds-card-icon-bg: var(--ds-color-primary);
+    /* Color del ícono destacado. */
+    --ds-card-icon-color: var(--ds-color-primary-contrast);
+
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--ds-card-gap);
+    min-width: 0;
+    border: var(--ds-card-border-width) solid var(--ds-card-border-color);
+    border-radius: var(--ds-card-radius);
+    background-color: var(--ds-card-bg);
+    color: var(--ds-card-color);
+    box-shadow: var(--ds-card-shadow);
+    overflow: hidden;
+  }
+
+  .card__header {
+    padding: var(--ds-space-2) var(--ds-card-padding);
+    background-color: var(--ds-card-cap-bg);
+  }
+
+  .card__image {
+    position: relative;
+    border-radius: var(--ds-card-image-radius);
+    overflow: hidden;
+
+    & img {
+      display: block;
+      width: 100%;
+      height: var(--ds-card-image-height);
+      object-fit: cover;
+      transition: transform var(--ds-duration-slow) var(--ds-easing);
+    }
+
+    // Badge sobre la imagen (por ejemplo, "Noticia").
+    & > .badge {
+      position: absolute;
+      top: var(--ds-space-3);
+      left: var(--ds-space-3);
+      z-index: 1;
+    }
+  }
+
+  .card__body {
+    flex: 1 1 auto;
+    padding: var(--ds-card-padding);
+
+    & > :last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .card__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: var(--ds-card-icon-size);
+    height: var(--ds-card-icon-size);
+    margin-bottom: var(--ds-space-3);
+    border-radius: 50%;
+    background-color: var(--ds-card-icon-bg);
+    color: var(--ds-card-icon-color);
+
+    & :where(svg) {
+      width: 50%;
+      height: 50%;
+    }
+  }
+
+  .card__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--ds-space-2);
+    margin-bottom: var(--ds-space-2);
+    color: var(--ds-color-text-muted);
+    font-size: var(--ds-font-size-sm);
+
+    & :where(svg) {
+      flex-shrink: 0;
+      width: 1.25em;
+      height: 1.25em;
+    }
+  }
+
+  .card__title {
+    margin: 0 0 var(--ds-space-2);
+    font-size: var(--ds-font-size-lg);
+    font-weight: var(--ds-font-weight-semibold);
+    line-height: var(--ds-line-height-tight);
+    transition: color var(--ds-duration-fast) var(--ds-easing);
+  }
+
+  .card__description {
+    margin: 0 0 var(--ds-space-2);
+  }
+
+  .card__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    & > li {
+      padding: var(--ds-space-3) var(--ds-card-padding);
+      border-bottom: 1px solid var(--ds-color-border);
+    }
+  }
+
+  .card__price {
+    margin: 0;
+    font-size: var(--ds-font-size-xl);
+    font-weight: var(--ds-font-weight-bold);
+    line-height: var(--ds-line-height-tight);
+  }
+
+  .card__footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--ds-space-2);
+    margin-top: auto;
+    padding: var(--ds-card-padding);
+    background-color: var(--ds-card-cap-bg);
+  }
+
+  // Sin fondo ni borde: imagen redondeada y texto alineado con ella (tarjetas de blog).
+  .card--plain {
+    --ds-card-bg: transparent;
+    --ds-card-border-color: transparent;
+    --ds-card-padding: 0;
+    --ds-card-gap: var(--ds-space-2);
+    --ds-card-image-radius: 0.875rem;
+  }
+
+  // Con sombra.
+  .card--elevated {
+    --ds-card-border-color: transparent;
+    --ds-card-shadow: var(--ds-shadow-sm);
+  }
+
+  // Toda la card es un enlace (<a class="card card--link">).
+  .card--link {
+    color: inherit;
+    text-decoration: none;
+
+    &:hover {
+      color: inherit;
+
+      & .card__title {
+        color: var(--ds-color-primary);
+      }
+
+      & .card__image img {
+        transform: scale(1.05);
+      }
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--ds-color-primary);
+      outline-offset: 2px;
+    }
+  }
+
+  // Fondo suave e ícono en la esquina (preguntas frecuentes, destacados).
+  .card--soft {
+    --ds-card-bg: var(--ds-color-info-bg);
+    --ds-card-border-color: var(--ds-color-info-border);
+    --ds-card-border-width: 2px;
+
+    overflow: visible;
+    text-align: center;
+
+    & .card__icon {
+      position: absolute;
+      top: -15px;
+      left: -15px;
+      margin: 0;
+    }
+
+    & .card__title {
+      color: var(--ds-color-primary);
+    }
+  }
+
+  // Planes y precios.
+  .card--pricing {
+    & .card__header {
+      text-align: center;
+    }
+
+    & .card__footer {
+      flex-direction: column;
+      justify-content: center;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .card__image img,
+    .card__title {
+      transition: none;
+    }
+  }
+}

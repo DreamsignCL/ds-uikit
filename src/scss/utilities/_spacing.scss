@@ -1,0 +1,21 @@
+// Espaciado: m-{lado}-{paso} y p-{lado}-{paso} con --ds-space-{1…8}.
+// Lados: sin letra (todos), x, y, t, b, s, e (propiedades lógicas).
+@use '../config' as *;
+
+@layer ds.utilities {
+  @each $prefijo, $propiedad in (m: margin, p: padding) {
+    @each $lado, $sufijo in $lados {
+      @each $paso, $valor in $espacios {
+        .#{$prefijo}#{$lado}-#{$paso} {
+          #{$propiedad}#{$sufijo}: $valor;
+        }
+      }
+
+      @if $propiedad == margin {
+        .#{$prefijo}#{$lado}-auto {
+          #{$propiedad}#{$sufijo}: auto;
+        }
+      }
+    }
+  }
+}

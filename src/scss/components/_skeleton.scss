@@ -1,0 +1,120 @@
+// Skeleton (.skeleton): bloque gris que ocupa el lugar del contenido mientras carga.
+// Tipo de elemento: --text, --title, --label, --input, --textarea, --image.
+// El ancho se cambia con --ds-skeleton-width (p. ej. style="--ds-skeleton-width: 70%").
+// Imagen: tamaños --sm, --md, --lg (cuadrados) y formas --rounded, --circle.
+// Los skeletons llevan aria-hidden="true"; la zona que carga, aria-busy="true"
+// y un texto para lectores de pantalla (.visually-hidden). Sin JS.
+@layer ds.components {
+  .skeleton {
+    /* Color del bloque (gris calculado del texto sobre la superficie). */
+    --ds-skeleton-bg: color-mix(in srgb, var(--ds-color-text) 8%, var(--ds-color-surface));
+    /* Duración de un pulso. */
+    --ds-skeleton-duration: 1.4s;
+    /* Ancho. Cada tipo trae el suyo; cámbialo para variar el largo de las líneas. */
+    --ds-skeleton-width: 100%;
+    /* Alto. */
+    --ds-skeleton-height: 1rem;
+    /* Proporción cuando el alto es automático (imagen sin tamaño). */
+    --ds-skeleton-aspect-ratio: auto;
+    /* Radio de las esquinas. */
+    --ds-skeleton-radius: var(--ds-radius-sm);
+    /* Separación bajo títulos y líneas de texto. */
+    --ds-skeleton-spacing: var(--ds-space-2);
+
+    display: block;
+    flex-shrink: 0;
+    width: var(--ds-skeleton-width);
+    max-width: 100%;
+    height: var(--ds-skeleton-height);
+    aspect-ratio: var(--ds-skeleton-aspect-ratio);
+    border-radius: var(--ds-skeleton-radius);
+    background-color: var(--ds-skeleton-bg);
+    animation: ds-skeleton-pulse var(--ds-skeleton-duration) ease-in-out infinite;
+  }
+
+  // Tipos de elemento.
+  .skeleton--text {
+    --ds-skeleton-height: 0.625rem;
+  }
+
+  .skeleton--title {
+    --ds-skeleton-width: 60%;
+    --ds-skeleton-height: 0.75rem;
+  }
+
+  .skeleton--text,
+  .skeleton--title {
+    margin-bottom: var(--ds-skeleton-spacing);
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .skeleton--label {
+    --ds-skeleton-width: 40%;
+    --ds-skeleton-height: 0.9375rem;
+  }
+
+  // Mismo alto y radio que .form-input (tamaño normal).
+  .skeleton--input {
+    --ds-skeleton-height: calc(var(--ds-font-size-base) * var(--ds-line-height-base) + 0.75rem + 2px);
+    --ds-skeleton-radius: var(--ds-radius-full);
+  }
+
+  // Mismo alto mínimo y radio que un textarea .form-input.
+  .skeleton--textarea {
+    --ds-skeleton-height: 7.5rem;
+    --ds-skeleton-radius: var(--ds-radius-lg);
+  }
+
+  // Sin tamaño, ocupa el ancho disponible con proporción 16:10 (como la imagen de una card).
+  .skeleton--image {
+    --ds-skeleton-height: auto;
+    --ds-skeleton-aspect-ratio: 16 / 10;
+    --ds-skeleton-radius: 0;
+  }
+
+  // Tamaños (cuadrados): 50, 100 y 150 px.
+  .skeleton--sm {
+    --ds-skeleton-width: 3.125rem;
+    --ds-skeleton-height: 3.125rem;
+  }
+
+  .skeleton--md {
+    --ds-skeleton-width: 6.25rem;
+    --ds-skeleton-height: 6.25rem;
+  }
+
+  .skeleton--lg {
+    --ds-skeleton-width: 9.375rem;
+    --ds-skeleton-height: 9.375rem;
+  }
+
+  // Formas (el rectángulo es la forma por defecto).
+  .skeleton--rounded {
+    --ds-skeleton-radius: var(--ds-radius-md);
+  }
+
+  .skeleton--circle {
+    --ds-skeleton-aspect-ratio: 1;
+    --ds-skeleton-radius: 50%;
+  }
+
+  @keyframes ds-skeleton-pulse {
+    0%,
+    100% {
+      opacity: 0.6;
+    }
+
+    50% {
+      opacity: 1;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .skeleton {
+      animation: none;
+    }
+  }
+}

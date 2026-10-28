@@ -1,0 +1,230 @@
+// Tabs (.tabs): pestañas que cambian el contenido dentro de la página (patrón tabs de ARIA).
+// Estructura: div.tabs > div.tabs__list[role="tablist"] > button.tabs__tab[role="tab"]
+// + div.tabs__panel[role="tabpanel"] (las inactivas llevan `hidden`).
+// La pestaña activa lleva aria-selected="true"; ds-uikit.js cambia de panel.
+// Variantes: subrayado (por defecto), tabs--pills y tabs--vertical (se pueden combinar).
+@layer ds.components {
+  .tabs {
+    /* Separación entre las pestañas y el panel. */
+    --ds-tabs-gap: var(--ds-space-4);
+    /* Separación entre pestañas. */
+    --ds-tabs-list-gap: var(--ds-space-6);
+    /* Grosor de la línea bajo las pestañas. */
+    --ds-tabs-list-border-width: 1px;
+    /* Color de la línea bajo las pestañas. */
+    --ds-tabs-list-border-color: var(--ds-color-border);
+    /* Espacio vertical interno de la pestaña. */
+    --ds-tabs-tab-padding-y: var(--ds-space-2);
+    /* Espacio horizontal interno de la pestaña. */
+    --ds-tabs-tab-padding-x: 0;
+    /* Separación entre ícono y texto. */
+    --ds-tabs-tab-gap: var(--ds-space-2);
+    --ds-tabs-tab-font-size: var(--ds-font-size-base);
+    --ds-tabs-tab-font-weight: var(--ds-font-weight-medium);
+    /* Color de la pestaña. */
+    --ds-tabs-tab-color: var(--ds-color-text-muted);
+    /* Fondo de la pestaña. */
+    --ds-tabs-tab-bg: transparent;
+    /* Radio de las esquinas de la pestaña. */
+    --ds-tabs-tab-radius: 0;
+    /* Color en hover. */
+    --ds-tabs-tab-hover-color: var(--ds-color-text);
+    /* Fondo en hover. */
+    --ds-tabs-tab-hover-bg: var(--ds-tabs-tab-bg);
+    /* Color de la pestaña activa. */
+    --ds-tabs-tab-active-color: var(--ds-color-primary);
+    /* Fondo de la pestaña activa. */
+    --ds-tabs-tab-active-bg: var(--ds-tabs-tab-bg);
+    /* Tamaño de los íconos. */
+    --ds-tabs-icon-size: 1.25em;
+    /* Grosor de la línea de la pestaña activa. */
+    --ds-tabs-indicator-size: 3px;
+    /* Color de la línea de la pestaña activa. */
+    --ds-tabs-indicator-color: currentColor;
+    /* Color del contorno de foco. */
+    --ds-tabs-focus-color: var(--ds-color-primary);
+    /* Opacidad de una pestaña deshabilitada. */
+    --ds-tabs-disabled-opacity: 0.5;
+    /* Duración de cada fundido al cambiar de panel (sale el anterior y entra el nuevo). */
+    --ds-tabs-transition-duration: calc(var(--ds-duration-fast) * 0.75);
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--ds-tabs-gap);
+  }
+
+  .tabs__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--ds-tabs-list-gap);
+    border-bottom: var(--ds-tabs-list-border-width) solid var(--ds-tabs-list-border-color);
+  }
+
+  .tabs__tab {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--ds-tabs-tab-gap);
+    margin: 0;
+    padding: var(--ds-tabs-tab-padding-y) var(--ds-tabs-tab-padding-x);
+    border: 0;
+    border-radius: var(--ds-tabs-tab-radius);
+    background: var(--ds-tabs-tab-bg);
+    color: var(--ds-tabs-tab-color);
+    font: inherit;
+    font-size: var(--ds-tabs-tab-font-size);
+    font-weight: var(--ds-tabs-tab-font-weight);
+    line-height: var(--ds-line-height-base);
+    text-align: start;
+    white-space: nowrap;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition:
+      color var(--ds-duration-fast) var(--ds-easing),
+      background-color var(--ds-duration-fast) var(--ds-easing);
+
+    // Línea bajo la pestaña: crece en hover y queda completa en la activa.
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: calc(-1 * var(--ds-tabs-list-border-width));
+      inset-inline-start: 0;
+      width: 0;
+      height: var(--ds-tabs-indicator-size);
+      border-radius: var(--ds-radius-full);
+      background-color: var(--ds-tabs-indicator-color);
+      transition: width var(--ds-duration-fast) var(--ds-easing);
+    }
+
+    &:hover {
+      background: var(--ds-tabs-tab-hover-bg);
+      color: var(--ds-tabs-tab-hover-color);
+
+      &::after {
+        width: 60%;
+      }
+    }
+
+    // Va después de :hover: la pestaña activa no cambia al pasar el mouse.
+    &[aria-selected='true'] {
+      background: var(--ds-tabs-tab-active-bg);
+      color: var(--ds-tabs-tab-active-color);
+
+      &::after {
+        width: 100%;
+      }
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--ds-tabs-focus-color);
+      outline-offset: 2px;
+    }
+
+    &:disabled,
+    &[aria-disabled='true'] {
+      opacity: var(--ds-tabs-disabled-opacity);
+      pointer-events: none;
+    }
+
+    & :where(svg) {
+      flex-shrink: 0;
+      width: var(--ds-tabs-icon-size);
+      height: var(--ds-tabs-icon-size);
+    }
+  }
+
+  .tabs__panel {
+    border-radius: var(--ds-radius-sm);
+    transition: opacity var(--ds-tabs-transition-duration) var(--ds-easing);
+
+    &[hidden] {
+      display: none;
+    }
+
+    & > :first-child {
+      margin-top: 0;
+    }
+
+    & > :last-child {
+      margin-bottom: 0;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--ds-tabs-focus-color);
+      outline-offset: 2px;
+    }
+
+    // Estados del fundido (los pone ds-uikit.js).
+    &.is-opening,
+    &.is-closing {
+      opacity: 0;
+    }
+  }
+
+  // Píldoras: la pestaña activa se rellena con primary, sin línea.
+  .tabs--pills {
+    --ds-tabs-list-gap: var(--ds-space-1);
+    --ds-tabs-list-border-width: 0;
+    --ds-tabs-tab-padding-x: var(--ds-space-4);
+    --ds-tabs-tab-radius: var(--ds-radius-full);
+    --ds-tabs-tab-hover-color: var(--ds-color-primary-hover);
+    --ds-tabs-tab-hover-bg: color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
+    --ds-tabs-tab-active-color: var(--ds-color-primary-contrast);
+    --ds-tabs-tab-active-bg: var(--ds-color-primary);
+
+    & .tabs__tab::after {
+      display: none;
+    }
+  }
+
+  // Vertical: las pestañas en columna, a la izquierda del panel.
+  .tabs--vertical {
+    --ds-tabs-gap: var(--ds-space-6);
+    --ds-tabs-list-gap: var(--ds-space-1);
+    --ds-tabs-tab-padding-x: var(--ds-space-4);
+
+    flex-direction: row;
+
+    & .tabs__list {
+      flex-direction: column;
+      flex-wrap: nowrap;
+      flex-shrink: 0;
+      border-bottom: 0;
+      border-inline-end: var(--ds-tabs-list-border-width) solid var(--ds-tabs-list-border-color);
+    }
+
+    // La línea va al costado y crece hacia abajo.
+    & .tabs__tab::after {
+      top: 0;
+      bottom: auto;
+      inset-inline-start: auto;
+      inset-inline-end: calc(-1 * var(--ds-tabs-list-border-width));
+      width: var(--ds-tabs-indicator-size);
+      height: 0;
+      transition-property: height;
+    }
+
+    & .tabs__tab:hover::after {
+      width: var(--ds-tabs-indicator-size);
+      height: 60%;
+    }
+
+    & .tabs__tab[aria-selected='true']::after {
+      width: var(--ds-tabs-indicator-size);
+      height: 100%;
+    }
+
+    & .tabs__panel {
+      flex: 1;
+      min-width: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tabs__tab,
+    .tabs__tab::after,
+    .tabs__panel {
+      transition: none;
+    }
+  }
+}

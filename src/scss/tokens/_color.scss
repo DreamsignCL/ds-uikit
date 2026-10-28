@@ -1,0 +1,82 @@
+// Variables públicas de color. Valores por defecto: Dreamsign.
+// Un theme.css puede cambiar cualquiera. Solo colores sólidos: las
+// transparencias se calculan en los componentes con color-mix().
+@layer ds.tokens {
+  :root {
+    /* Color de interacción: botones, enlaces y foco. */
+    --ds-color-primary: #007cbd;
+    /* Primary en hover y estado activo. */
+    --ds-color-primary-hover: #025b8b;
+    /* Texto sobre primary. */
+    --ds-color-primary-contrast: #fff;
+
+    /* Color secundario de acciones. */
+    --ds-color-secondary: #ffc107;
+    /* Secondary en hover y estado activo. */
+    --ds-color-secondary-hover: #c99807;
+    /* Texto sobre secondary. */
+    --ds-color-secondary-contrast: #000;
+
+    /* Inicio del degradado de marca. */
+    --ds-color-brand-start: #932771;
+    /* Fin del degradado de marca. */
+    --ds-color-brand-end: #662d91;
+    /* Degradado de identidad (heros, cabeceras, firmas). */
+    --ds-gradient-brand: linear-gradient(41deg, var(--ds-color-brand-start), var(--ds-color-brand-end));
+
+    /* Éxito: color base. */
+    --ds-color-success: #529c4e;
+    /* Éxito: fondo suave. */
+    --ds-color-success-bg: #eaffe9;
+    /* Éxito: borde. */
+    --ds-color-success-border: #96cf93;
+    /* Éxito: tono fuerte (hover, texto sobre fondo suave). */
+    --ds-color-success-strong: #3a7d3a;
+    /* Texto sobre success. */
+    --ds-color-success-contrast: #fff;
+
+    /* Error: color base. */
+    --ds-color-danger: #bb4848;
+    /* Error: fondo suave. */
+    --ds-color-danger-bg: #ffe9e9;
+    /* Error: borde. */
+    --ds-color-danger-border: #f0baba;
+    /* Error: tono fuerte. */
+    --ds-color-danger-strong: #920a0a;
+    /* Texto sobre danger. */
+    --ds-color-danger-contrast: #fff;
+
+    /* Advertencia: color base. */
+    --ds-color-warning: #ffc107;
+    /* Advertencia: fondo suave. */
+    --ds-color-warning-bg: #fffbe9;
+    /* Advertencia: borde. */
+    --ds-color-warning-border: #eedd91;
+    /* Advertencia: tono fuerte. */
+    --ds-color-warning-strong: #c99807;
+    /* Texto sobre warning. */
+    --ds-color-warning-contrast: #000;
+
+    /* Información: color base. */
+    --ds-color-info: #95cfe6;
+    /* Información: fondo suave. */
+    --ds-color-info-bg: #dff6ff;
+    /* Información: borde. */
+    --ds-color-info-border: #d6eafd;
+    /* Información: tono fuerte. */
+    --ds-color-info-strong: #4c85b6;
+    /* Texto sobre info. */
+    --ds-color-info-contrast: #000;
+
+    /* Texto principal. */
+    --ds-color-text: #1e1e1e;
+    /* Texto secundario (ayudas, fechas, notas). */
+    --ds-color-text-muted: #6d6d6d;
+    /* Fondo de la página. */
+    --ds-color-body-bg: #fff;
+    /* Fondo de cards, menús y modales. */
+    --ds-color-surface: #fff;
+    /* Bordes y separadores. */
+    --ds-color-border: #e5e7eb;
+  }
+}

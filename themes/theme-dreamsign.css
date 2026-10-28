@@ -1,0 +1,53 @@
+/*
+ * Tema Dreamsign para dsUIKit.
+ * Cárgalo después de ds-uikit.css. Va sin @layer para que siempre gane.
+ * Un tema solo cambia colores y tipografías.
+ * Sirve como plantilla: copia este archivo y cambia los valores.
+ */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+:root {
+  /* Interacción */
+  --ds-color-primary: #007cbd;
+  --ds-color-primary-hover: #025b8b;
+  --ds-color-primary-contrast: #fff;
+  --ds-color-secondary: #ffc107;
+  --ds-color-secondary-hover: #c99807;
+  --ds-color-secondary-contrast: #000;
+
+  /* Marca */
+  --ds-color-brand-start: #932771;
+  --ds-color-brand-end: #662d91;
+
+  /* Feedback */
+  --ds-color-success: #529c4e;
+  --ds-color-success-bg: #eaffe9;
+  --ds-color-success-border: #96cf93;
+  --ds-color-success-strong: #3a7d3a;
+  --ds-color-success-contrast: #fff;
+  --ds-color-danger: #bb4848;
+  --ds-color-danger-bg: #ffe9e9;
+  --ds-color-danger-border: #f0baba;
+  --ds-color-danger-strong: #920a0a;
+  --ds-color-danger-contrast: #fff;
+  --ds-color-warning: #ffc107;
+  --ds-color-warning-bg: #fffbe9;
+  --ds-color-warning-border: #eedd91;
+  --ds-color-warning-strong: #c99807;
+  --ds-color-warning-contrast: #000;
+  --ds-color-info: #95cfe6;
+  --ds-color-info-bg: #dff6ff;
+  --ds-color-info-border: #d6eafd;
+  --ds-color-info-strong: #4c85b6;
+  --ds-color-info-contrast: #000;
+
+  /* Neutros */
+  --ds-color-text: #1e1e1e;
+  --ds-color-text-muted: #6d6d6d;
+  --ds-color-body-bg: #fff;
+  --ds-color-surface: #fff;
+  --ds-color-border: #e5e7eb;
+
+  /* Tipografía */
+  --ds-font-family-base: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}

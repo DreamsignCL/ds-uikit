@@ -1,0 +1,172 @@
+// Modal (.modal): ventana sobre la página, con fondo oscuro. Se abre y se
+// cierra con ds-uikit.js (data-ds-toggle="modal" y data-ds-dismiss="modal").
+// .modal cubre la pantalla y crea su propia capa: el fondo (modal__backdrop) y
+// la ventana (modal__dialog) van dentro, así un modal abierto sobre otro queda
+// completo encima (el que va después en el HTML).
+@use '../config' as *;
+
+@layer ds.components {
+  .modal {
+    /* Ancho máximo de la ventana. */
+    --ds-modal-width: 32rem;
+    /* Separación mínima entre la ventana y el borde de la pantalla. */
+    --ds-modal-margin: clamp(1rem, 5vw, 2rem);
+    /* Fondo de la ventana. */
+    --ds-modal-bg: var(--ds-color-surface);
+    /* Color del texto. */
+    --ds-modal-color: var(--ds-color-text);
+    /* Color del borde de la ventana. */
+    --ds-modal-border-color: transparent;
+    --ds-modal-radius: var(--ds-radius-lg);
+    --ds-modal-shadow: var(--ds-shadow-lg);
+    /* Espacio vertical interno de cabecera, cuerpo y pie. */
+    --ds-modal-padding-y: 1rem;
+    /* Espacio horizontal interno de cabecera, cuerpo y pie. */
+    --ds-modal-padding-x: 1.25rem;
+    /* Línea bajo la cabecera y sobre el pie. */
+    --ds-modal-divider-color: var(--ds-color-border);
+    /* Tamaño del título (modal__title). */
+    --ds-modal-title-font-size: var(--ds-font-size-lg);
+    /* Tamaño del botón para cerrar (modal__close). */
+    --ds-modal-close-size: 2rem;
+    /* Color del fondo oscuro (modal__backdrop). */
+    --ds-modal-backdrop-bg: rgb(0 0 0 / 0.6);
+    /* Desenfoque de la página detrás del fondo. */
+    --ds-modal-backdrop-blur: 4px;
+    /* Desplazamiento vertical de la ventana al abrir y cerrar. */
+    --ds-modal-offset: -0.75rem;
+    /* Duración del fundido al abrir y cerrar. */
+    --ds-modal-transition-duration: var(--ds-duration-fast);
+    /* Capa del modal (z-index). */
+    --ds-modal-z-index: var(--ds-z-modal);
+
+    position: fixed;
+    inset: 0;
+    z-index: var(--ds-modal-z-index);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: var(--ds-modal-margin);
+    outline: 0;
+
+    &[hidden] {
+      display: none;
+    }
+
+    // Estados de la transición (los pone ds-uikit.js).
+    &.is-opening,
+    &.is-closing {
+      & .modal__backdrop {
+        opacity: 0;
+      }
+
+      & .modal__dialog {
+        opacity: 0;
+        transform: translateY(var(--ds-modal-offset));
+      }
+    }
+  }
+
+  // Centrado verticalmente.
+  .modal--centered {
+    align-items: center;
+  }
+
+  .modal--sm {
+    --ds-modal-width: 20rem;
+  }
+
+  .modal--lg {
+    --ds-modal-width: 50rem;
+  }
+
+  // Fondo oscuro: cubre la pantalla detrás de la ventana. Un clic aquí cierra el modal.
+  .modal__backdrop {
+    position: absolute;
+    inset: 0;
+    background-color: var(--ds-modal-backdrop-bg);
+    backdrop-filter: blur(var(--ds-modal-backdrop-blur));
+    transition: opacity var(--ds-modal-transition-duration) var(--ds-easing);
+  }
+
+  // Ventana: cabecera y pie fijos; si el contenido no cabe, el cuerpo hace scroll.
+  .modal__dialog {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: var(--ds-modal-width);
+    max-height: 100%;
+    margin: 0;
+    padding: 0;
+    border: 1px solid var(--ds-modal-border-color);
+    border-radius: var(--ds-modal-radius);
+    background-color: var(--ds-modal-bg);
+    color: var(--ds-modal-color);
+    box-shadow: var(--ds-modal-shadow);
+    transition:
+      opacity var(--ds-modal-transition-duration) var(--ds-easing),
+      transform var(--ds-modal-transition-duration) var(--ds-easing);
+  }
+
+  .modal__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--ds-space-3);
+    flex-shrink: 0;
+    padding: var(--ds-modal-padding-y) var(--ds-modal-padding-x);
+    border-bottom: 1px solid var(--ds-modal-divider-color);
+  }
+
+  .modal__title {
+    margin: 0;
+    font-family: var(--ds-font-family-heading);
+    font-size: var(--ds-modal-title-font-size);
+    font-weight: var(--ds-font-weight-semibold);
+    line-height: var(--ds-line-height-tight);
+  }
+
+  // <button class="modal__close" data-ds-dismiss="modal" aria-label="Cerrar">.
+  .modal__close {
+    flex-shrink: 0;
+    // Margen negativo: la X no agranda la cabecera y queda alineada al borde.
+    margin: -0.375rem -0.5rem -0.375rem auto;
+    @include boton-cerrar(var(--ds-modal-close-size));
+  }
+
+  .modal__body {
+    flex: 1 1 auto;
+    min-height: 0;
+    padding: var(--ds-modal-padding-y) var(--ds-modal-padding-x);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+
+    & > :first-child {
+      margin-top: 0;
+    }
+
+    & > :last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .modal__footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--ds-space-2);
+    flex-shrink: 0;
+    padding: var(--ds-modal-padding-y) var(--ds-modal-padding-x);
+    border-top: 1px solid var(--ds-modal-divider-color);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .modal__backdrop,
+    .modal__dialog,
+    .modal__close {
+      transition: none;
+    }
+  }
+}

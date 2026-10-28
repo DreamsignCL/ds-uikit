@@ -1,0 +1,118 @@
+// Configuración de Sass (solo para escribir el kit; no genera CSS).
+@use 'sass:map';
+
+// Los breakpoints quedan en Sass: las media queries no aceptan variables CSS.
+$breakpoints: (
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  xxl: 1408px,
+);
+
+@mixin mq($breakpoint) {
+  @if map.has-key($breakpoints, $breakpoint) {
+    @media (min-width: map.get($breakpoints, $breakpoint)) {
+      @content;
+    }
+  } @else {
+    @media (min-width: $breakpoint) {
+      @content;
+    }
+  }
+}
+
+// Roles de color con variante sólida y de contorno.
+// Valor: sufijo de la variable para hover (primary/secondary usan -hover; feedback, -strong).
+$roles: (
+  primary: hover,
+  secondary: hover,
+  success: strong,
+  danger: strong,
+  warning: strong,
+  info: strong,
+);
+
+// Tono suave de un rol (badge, mensaje…): define --ds-{componente}-bg,
+// -border-color y -color. Los roles de feedback usan sus variables -bg,
+// -border y -strong; primary y secondary se calculan con color-mix().
+@mixin rol-suave($rol, $componente) {
+  @if map.get($roles, $rol) == strong {
+    --ds-#{$componente}-bg: var(--ds-color-#{$rol}-bg);
+    --ds-#{$componente}-border-color: var(--ds-color-#{$rol}-border);
+    --ds-#{$componente}-color: var(--ds-color-#{$rol}-strong);
+  } @else {
+    --ds-#{$componente}-bg: color-mix(in srgb, var(--ds-color-#{$rol}) 12%, var(--ds-color-surface));
+    --ds-#{$componente}-border-color: color-mix(in srgb, var(--ds-color-#{$rol}) 35%, var(--ds-color-surface));
+    --ds-#{$componente}-color: var(--ds-color-#{$rol}-hover);
+  }
+}
+
+// Botón para cerrar (message__close, modal__close): cuadrado, transparente y
+// con la X dibujada por mask, que toma el color del texto (currentColor).
+@mixin boton-cerrar($tamano) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: $tamano;
+  height: $tamano;
+  padding: 0;
+  border: 0;
+  border-radius: var(--ds-radius-sm);
+  background: transparent;
+  color: inherit;
+  opacity: 0.7;
+  cursor: pointer;
+  transition:
+    opacity var(--ds-duration-fast) var(--ds-easing),
+    background-color var(--ds-duration-fast) var(--ds-easing);
+
+  &::before {
+    content: '';
+    width: 0.75rem;
+    height: 0.75rem;
+    background-color: currentColor;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath fill='none' stroke='%23000' stroke-linecap='round' stroke-width='1.75' d='m1.5 1.5 9 9m0-9-9 9'/%3E%3C/svg%3E") center / contain no-repeat;
+  }
+
+  &:hover {
+    opacity: 1;
+    background-color: color-mix(in srgb, currentColor 10%, transparent);
+  }
+
+  &:focus-visible {
+    opacity: 1;
+  }
+}
+
+// Utilidades (capa ds.utilities). Las clases se generan desde estos mapas.
+// Espaciado (m-*, p-*): 0 y los pasos de --ds-space-{1…8}; margin suma auto.
+$espacios: (
+  0: 0,
+  1: var(--ds-space-1),
+  2: var(--ds-space-2),
+  3: var(--ds-space-3),
+  4: var(--ds-space-4),
+  5: var(--ds-space-5),
+  6: var(--ds-space-6),
+  7: var(--ds-space-7),
+  8: var(--ds-space-8),
+);
+
+// Lados del espaciado, con propiedades lógicas. Los ejes van antes que los
+// lados sueltos: en `mx-4 ms-0`, gana ms-0.
+$lados: (
+  '': '',
+  x: '-inline',
+  y: '-block',
+  t: '-block-start',
+  b: '-block-end',
+  s: '-inline-start',
+  e: '-inline-end',
+);
+
+// Valores de display (d-*), también por breakpoint.
+$displays: none, inline, inline-block, block, flex, inline-flex, grid;
+
+// Alineación de texto (text-*), también por breakpoint.
+$alineaciones: start, center, end;

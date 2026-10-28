@@ -1,0 +1,41 @@
+// Variables públicas de tipografía. El kit no carga fuentes:
+// cada theme.css carga la suya y la asigna aquí.
+@layer ds.tokens {
+  :root {
+    /* Fuente del texto. */
+    --ds-font-family-base: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+    /* Fuente de los títulos. */
+    --ds-font-family-heading: var(--ds-font-family-base);
+
+    /* 12–13 px */
+    --ds-font-size-xs: clamp(0.75rem, 0.72rem + 0.15vw, 0.8125rem);
+    /* 14–15 px */
+    --ds-font-size-sm: clamp(0.875rem, 0.84rem + 0.2vw, 0.9375rem);
+    /* 16 px */
+    --ds-font-size-base: 1rem;
+    /* 18–20 px */
+    --ds-font-size-lg: clamp(1.125rem, 1.05rem + 0.4vw, 1.25rem);
+    /* 24–32 px */
+    --ds-font-size-xl: clamp(1.5rem, 1.3rem + 1vw, 2rem);
+    /* 32–48 px */
+    --ds-font-size-2xl: clamp(2rem, 1.7rem + 1.5vw, 3rem);
+    /* 40–64 px */
+    --ds-font-size-3xl: clamp(2.5rem, 2rem + 2vw, 4rem);
+
+    /* Peso normal. */
+    --ds-font-weight-regular: 400;
+    /* Peso medio. */
+    --ds-font-weight-medium: 500;
+    /* Peso seminegrita. */
+    --ds-font-weight-semibold: 600;
+    /* Peso negrita (títulos). */
+    --ds-font-weight-bold: 700;
+
+    /* Interlineado de títulos. */
+    --ds-line-height-tight: 1.1;
+    /* Interlineado general. */
+    --ds-line-height-base: 1.5;
+    /* Interlineado de párrafos. */
+    --ds-line-height-relaxed: 1.7;
+  }
+}

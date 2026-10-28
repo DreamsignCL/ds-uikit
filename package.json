@@ -1,0 +1,33 @@
+{
+  "name": "ds-uikit",
+  "version": "0.1.0",
+  "description": "UI Kit de la familia Dreamsign: CSS con variables --ds-*, JS liviano y documentación.",
+  "keywords": [
+    "css",
+    "ui-kit",
+    "design-system",
+    "dreamsign"
+  ],
+  "homepage": "https://dsuikit.dreamsign.cl",
+  "bugs": {
+    "url": "https://github.com/DreamsignCL/ds-uikit/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DreamsignCL/ds-uikit.git"
+  },
+  "license": "MIT",
+  "author": "Dreamsign (https://dreamsign.cl)",
+  "type": "module",
+  "style": "dist/ds-uikit.css",
+  "sass": "src/scss/ds-uikit.scss",
+  "main": "dist/ds-uikit.js",
+  "module": "dist/ds-uikit.esm.js",
+  "unpkg": "dist/ds-uikit.min.js",
+  "jsdelivr": "dist/ds-uikit.min.js",
+  "files": [
+    "dist",
+    "src",
+    "themes"
+  ]
+}
